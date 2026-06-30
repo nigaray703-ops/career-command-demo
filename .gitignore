@@ -1,0 +1,13 @@
+.DS_Store
+node_modules/
+dist/
+coverage/
+*.log
+*.xlsx
+*.csv
+*.numbers
+*.pdf
+*.doc
+*.docx
+*.env
+*.local

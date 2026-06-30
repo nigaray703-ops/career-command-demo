@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#2563eb" />
+    <meta name="application-name" content="Career Command Center Demo" />
+    <title>Career Command Center Demo</title>
+    <link rel="icon" href="./assets/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" href="./assets/favicon-32.png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png" />
+    <link rel="stylesheet" href="./src/jobTrackerStyles.css" />
+  </head>
+  <body class="is-signed-in demo-mode">
+    <div class="tracker-shell">
+      <aside class="sidebar" aria-label="主导航">
+        <a class="brand" href="#dashboard" aria-label="Career Command Center Demo 首页">
+          <span class="brand-mark" aria-hidden="true">
+            <img src="./assets/job-tracker-logo-96.png" alt="" />
+          </span>
+          <span>Career Command Demo</span>
+        </a>
+        <section class="sidebar-account" aria-label="演示说明">
+          <div class="cloud-profile">
+            <span class="demo-avatar" aria-hidden="true">D</span>
+            <div>
+              <strong>Demo workspace</strong>
+              <span>Fake data only</span>
+            </div>
+          </div>
+          <span class="cloud-status">演示版，无需登录</span>
+          <span class="sync-status">数据仅保存在浏览器本地</span>
+          <div class="sidebar-actions">
+            <button class="ghost-button" id="resetDemoButton" type="button">重置演示数据</button>
+            <button class="ghost-button" id="exportDataButton" type="button">下载演示数据</button>
+          </div>
+        </section>
+        <nav class="side-nav">
+          <button class="nav-item active" type="button" data-view="dashboard">首页</button>
+          <button class="nav-item" type="button" data-view="applications">申请列表</button>
+        </nav>
+        <div class="sidebar-note">
+          <strong id="sidebarTotal">0</strong>
+          <span>条演示记录</span>
+        </div>
+      </aside>
+
+      <main class="workspace">
+        <header class="topbar">
+          <div>
+            <h1>求职申请追踪器演示版</h1>
+            <p>展示投递状态、候选人中心、面试进度和转化情况。所有记录均为虚构示例。</p>
+          </div>
+          <div class="topbar-actions">
+            <button class="primary-button" id="addApplicationButton" type="button">+ 添加演示申请</button>
+          </div>
+        </header>
+
+        <section class="dashboard-view view active" id="dashboardView" aria-label="首页">
+          <div class="metric-grid" id="metricGrid"></div>
+
+          <div class="dashboard-grid">
+            <section class="panel chart-panel">
+              <div class="panel-head">
+                <div>
+                  <h2>状态分布</h2>
+                  <p>按当前状态统计演示申请分布。</p>
+                </div>
+              </div>
+              <div class="chart-layout">
+                <div class="donut" id="statusDonut" aria-label="状态分布图"></div>
+                <div class="status-bars" id="statusBars"></div>
+              </div>
+            </section>
+
+            <section class="panel rate-panel">
+              <h2>转化率</h2>
+              <div class="rate-stack" id="rateCards"></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="applications-view view" id="applicationsView" aria-label="申请列表">
+          <section class="panel">
+            <div class="panel-head app-head">
+              <div>
+                <h2>申请列表</h2>
+                <p>搜索公司或岗位，筛选状态，并维护演示记录。</p>
+              </div>
+              <div class="toolbar">
+                <label class="search-field" for="applicationSearch">
+                  <span aria-hidden="true">⌕</span>
+                  <input id="applicationSearch" type="search" placeholder="搜索公司或岗位" />
+                </label>
+                <select id="statusFilter" aria-label="按状态筛选"></select>
+                <label class="tool-select" for="sortBy">
+                  <span>排序</span>
+                  <select id="sortBy" aria-label="排序字段">
+                    <option value="companyName">公司 A-Z</option>
+                    <option value="roleTitle">岗位 A-Z</option>
+                    <option value="appliedDate">申请日期</option>
+                    <option value="location">所在地</option>
+                    <option value="workMode">工作模式</option>
+                    <option value="platform">申请平台</option>
+                    <option value="status">当前状态</option>
+                  </select>
+                </label>
+                <label class="tool-select compact-select" for="sortDirection">
+                  <span>方向</span>
+                  <select id="sortDirection" aria-label="排序方向">
+                    <option value="asc">升序</option>
+                    <option value="desc">降序</option>
+                  </select>
+                </label>
+                <label class="tool-select" for="groupBy">
+                  <span>分类</span>
+                  <select id="groupBy" aria-label="分组方式">
+                    <option value="none">不分类</option>
+                    <option value="companyName">按公司</option>
+                    <option value="workMode">按工作模式</option>
+                    <option value="platform">按申请平台</option>
+                    <option value="status">按当前状态</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>公司</th>
+                    <th>岗位</th>
+                    <th>当前状态</th>
+                    <th>申请日期</th>
+                    <th>申请平台</th>
+                    <th>所在地</th>
+                    <th>工作模式</th>
+                    <th>候选人中心</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody id="applicationRows"></tbody>
+              </table>
+            </div>
+            <div class="empty-state" id="emptyState" hidden>
+              <strong>没有找到申请记录</strong>
+              <span>换个关键词或状态筛选试试。</span>
+            </div>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <dialog id="applicationDialog">
+      <form class="application-form" id="applicationForm" method="dialog">
+        <div class="dialog-head">
+          <div>
+            <p id="dialogMode">添加申请</p>
+            <h2 id="dialogTitle">新的演示记录</h2>
+          </div>
+          <button class="icon-button" value="cancel" type="submit" formnovalidate aria-label="关闭">×</button>
+        </div>
+
+        <input name="id" type="hidden" />
+        <div class="form-grid">
+          <label><span>公司名称</span><input name="companyName" required /></label>
+          <label><span>岗位名称</span><input name="roleTitle" required /></label>
+          <label><span>所在地</span><input name="location" /></label>
+          <label><span>工作模式</span><select name="workMode" id="workModeOptions"></select></label>
+          <label><span>申请平台</span><input name="platform" placeholder="LinkedIn、Seek、公司官网" /></label>
+          <label><span>候选人中心网址</span><input name="applicationUrl" type="url" placeholder="https://example.com/candidate" /></label>
+          <label><span>申请日期</span><input name="appliedDate" type="date" /></label>
+          <label><span>日期备注</span><input name="appliedDateNote" placeholder="可选" /></label>
+          <label><span>当前状态</span><select name="status" id="statusOptions" required></select></label>
+        </div>
+        <div class="dialog-actions">
+          <button class="ghost-button" value="cancel" type="submit" formnovalidate>取消</button>
+          <button class="primary-button" value="save" type="submit">保存申请</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="deleteDialog" class="confirm-dialog">
+      <form method="dialog">
+        <h2>删除这条演示申请？</h2>
+        <p>删除后，这条记录会从演示列表中移除。</p>
+        <div class="dialog-actions">
+          <button class="ghost-button" value="cancel" type="submit">取消</button>
+          <button class="danger-button" value="delete" type="submit">删除</button>
+        </div>
+      </form>
+    </dialog>
+
+    <script type="module" src="./src/jobTrackerDemo.js"></script>
+  </body>
+</html>
