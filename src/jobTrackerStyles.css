@@ -417,7 +417,7 @@ body.is-signed-out .login-gate {
 }
 
 .workspace {
-  padding: 26px;
+  padding: 16px;
   display: grid;
   gap: 22px;
   min-width: 0;
@@ -435,10 +435,24 @@ body.is-signed-out .login-gate {
   align-items: center;
   justify-content: space-between;
   gap: 18px;
+  padding-inline: 16px;
 }
 
 .topbar > div:first-child {
   min-width: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  flex-wrap: nowrap;
+}
+
+.topbar h1 {
+  flex: 0 0 auto;
+}
+
+.topbar p {
+  min-width: 0;
+  white-space: nowrap;
 }
 
 .topbar-actions {
@@ -735,7 +749,7 @@ body.is-lang-en .rate-card strong {
 }
 
 .panel {
-  padding: 18px;
+  padding: 16px;
   min-width: 0;
   position: relative;
   overflow: hidden;
@@ -974,18 +988,21 @@ textarea {
 
 .table-wrap {
   width: 100%;
-  overflow-x: visible;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
 }
 
 table {
   width: 100%;
-  min-width: 0;
+  min-width: 940px;
   border-collapse: collapse;
   table-layout: fixed;
 }
 
 .applications-view table {
-  min-width: 0;
+  min-width: 940px;
 }
 
 .compact table {
@@ -996,15 +1013,16 @@ th {
   color: #516078;
   font-size: 11.5px;
   font-weight: 780;
-  text-align: left;
+  text-align: center;
   text-transform: uppercase;
   line-height: 1.25;
+  white-space: nowrap;
 }
 
 td,
 th {
   border-bottom: 1px solid rgba(37, 99, 235, 0.1);
-  padding: 12px 8px;
+  padding: 11px 7px;
   vertical-align: middle;
 }
 
@@ -1022,52 +1040,86 @@ tbody tr:hover {
 
 .applications-view td,
 .applications-view th {
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
+  word-break: normal;
 }
 
-.applications-view td:nth-child(2),
-.applications-view th:nth-child(2) {
-  width: 20%;
+.applications-view td,
+.applications-view th {
+  text-align: center;
 }
 
 .applications-view td:nth-child(1),
-.applications-view th:nth-child(1) {
-  width: 16%;
-}
-
-.applications-view td:nth-child(3),
-.applications-view th:nth-child(3) {
-  width: 8.5%;
-}
-
-.applications-view td:nth-child(4),
-.applications-view th:nth-child(4) {
-  width: 10.5%;
-}
-
-.applications-view td:nth-child(5),
-.applications-view th:nth-child(5) {
-  width: 9%;
-}
-
-.applications-view td:nth-child(6),
-.applications-view th:nth-child(6) {
-  width: 9.5%;
-}
-
-.applications-view td:nth-child(7),
-.applications-view th:nth-child(7) {
-  width: 8.5%;
-}
-
-.applications-view td:nth-child(8),
-.applications-view th:nth-child(8) {
-  width: 7.5%;
+.applications-view th:nth-child(1),
+.applications-view td:nth-child(2),
+.applications-view th:nth-child(2) {
+  text-align: left;
 }
 
 .applications-view td:nth-child(9),
 .applications-view th:nth-child(9) {
-  width: 10.5%;
+  text-align: center;
+}
+
+.applications-view td:nth-child(1),
+.applications-view th:nth-child(1) {
+  width: 15%;
+}
+
+.applications-view td:nth-child(2),
+.applications-view th:nth-child(2) {
+  width: 21%;
+}
+
+.applications-view td:nth-child(3),
+.applications-view th:nth-child(3) {
+  width: 9%;
+}
+
+.applications-view td:nth-child(4),
+.applications-view th:nth-child(4) {
+  width: 11%;
+}
+
+.applications-view td:nth-child(5),
+.applications-view th:nth-child(5) {
+  width: 10%;
+}
+
+.applications-view td:nth-child(6),
+.applications-view th:nth-child(6) {
+  width: 8%;
+}
+
+.applications-view td:nth-child(7),
+.applications-view th:nth-child(7) {
+  width: 8%;
+}
+
+.applications-view td:nth-child(8),
+.applications-view th:nth-child(8) {
+  width: 6%;
+}
+
+.applications-view td:nth-child(9),
+.applications-view th:nth-child(9) {
+  width: 12%;
+}
+
+.applications-view td:nth-child(8),
+.applications-view th:nth-child(8) {
+  text-align: center;
+}
+
+.applications-view td:nth-child(8) {
+  justify-items: center;
+}
+
+.applications-view td:nth-child(4),
+.applications-view th:nth-child(4) {
+  white-space: nowrap;
+  overflow-wrap: normal;
+  word-break: keep-all;
 }
 
 td span:not(.status-badge):not(.priority) {
@@ -1160,7 +1212,7 @@ td span:not(.status-badge):not(.priority) {
 }
 
 .row-actions button {
-  min-height: 30px;
+  min-height: 28px;
   min-width: 0;
   padding: 0 5px;
   border: 1px solid var(--line);
@@ -1299,6 +1351,10 @@ dialog::backdrop {
   .dashboard-grid {
     grid-template-columns: 1fr;
   }
+
+  .applications-view table {
+    min-width: 860px;
+  }
 }
 
 @media (max-width: 820px) {
@@ -1406,6 +1462,16 @@ dialog::backdrop {
     flex-direction: column;
   }
 
+  .topbar > div:first-child {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .topbar p {
+    white-space: normal;
+  }
+
   .topbar-actions {
     justify-content: space-between;
   }
@@ -1465,20 +1531,24 @@ dialog::backdrop {
     width: 100%;
   }
 
+  .applications-view table {
+    min-width: 0;
+  }
+
   .applications-view thead {
     display: none;
   }
 
   .applications-view tbody {
     display: grid;
-    gap: 12px;
+    gap: 8px;
   }
 
   .applications-view tbody tr {
     border: 1px solid rgba(37, 99, 235, 0.12);
-    border-radius: 10px;
+    border-radius: 8px;
     background: linear-gradient(180deg, #ffffff, #f9fcff);
-    box-shadow: 0 12px 28px rgba(37, 99, 235, 0.07);
+    box-shadow: 0 8px 18px rgba(37, 99, 235, 0.06);
     overflow: hidden;
   }
 
@@ -1487,23 +1557,39 @@ dialog::backdrop {
   }
 
   .applications-view td {
-    min-height: 44px;
+    min-height: 34px;
     border-bottom: 1px solid rgba(37, 99, 235, 0.08);
-    padding: 10px 12px;
+    padding: 7px 10px;
     display: grid;
-    grid-template-columns: minmax(84px, 32%) minmax(0, 1fr);
+    grid-template-columns: minmax(76px, 29%) minmax(0, 1fr);
     align-items: center;
-    gap: 10px;
-    font-size: 13px;
+    gap: 8px;
+    font-size: 12.5px;
+    line-height: 1.32;
   }
 
   .applications-view td::before {
     content: attr(data-label);
     color: var(--muted);
-    font-size: 11px;
+    font-size: 10.5px;
     font-weight: 820;
-    line-height: 1.25;
+    line-height: 1.2;
     text-transform: uppercase;
+  }
+
+  .applications-view .role-cell {
+    font-size: 12.5px !important;
+    line-height: 1.22;
+  }
+
+  .applications-view .company-cell {
+    line-height: 1.18;
+  }
+
+  .applications-view .status-badge {
+    min-height: 22px;
+    padding: 0 8px;
+    font-size: 11.5px;
   }
 
   .applications-view td:nth-child(1),
@@ -1518,6 +1604,12 @@ dialog::backdrop {
     width: 100%;
   }
 
+  .applications-view td:nth-child(5),
+  .applications-view td:nth-child(6),
+  .applications-view td:nth-child(7) {
+    display: none;
+  }
+
   .applications-view td:last-child {
     border-bottom: 0;
   }
@@ -1528,6 +1620,8 @@ dialog::backdrop {
 
   .applications-view .row-actions button {
     flex: 1 1 0;
+    min-height: 28px;
+    font-size: 11px;
   }
 
   .group-row td {
@@ -1575,9 +1669,10 @@ dialog::backdrop {
   }
 
   .applications-view td {
-    grid-template-columns: 1fr;
-    align-items: start;
-    gap: 4px;
+    grid-template-columns: minmax(70px, 30%) minmax(0, 1fr);
+    align-items: center;
+    gap: 6px;
+    padding: 7px 9px;
   }
 
   .applications-view .row-actions {

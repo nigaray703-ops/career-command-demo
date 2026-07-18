@@ -661,7 +661,7 @@ function renderApplications() {
   els.applicationRows.innerHTML = groups.map((group) => {
     const groupHeader = group.label ? `
       <tr class="group-row">
-        <td colspan="12">${escapeHtml(groupDisplayLabel(group.label))}<span>${group.records.length}</span></td>
+        <td colspan="9">${escapeHtml(groupDisplayLabel(group.label))}<span>${group.records.length}</span></td>
       </tr>
     ` : '';
     const rows = group.records.map((record) => `
@@ -670,12 +670,9 @@ function renderApplications() {
           <td data-label="${escapeHtml(text('role'))}"><span class="role-cell">${escapeHtml(record.roleTitle)}</span></td>
           <td data-label="${escapeHtml(text('status'))}">${statusBadge(record.status)}</td>
           <td data-label="${escapeHtml(text('appliedDate'))}">${formatAppliedDate(record)}</td>
-          <td data-label="${escapeHtml(text('platform'))}">${escapeHtml(record.platform || '-')}</td>
           <td data-label="${escapeHtml(text('location'))}">${escapeHtml(record.location || '-')}</td>
           <td data-label="${escapeHtml(text('workMode'))}">${escapeHtml(modeLabel(record.workMode) || '-')}</td>
           <td data-label="${escapeHtml(text('employmentType'))}">${escapeHtml(employmentTypeLabel(record.employmentType) || '-')}</td>
-          <td data-label="${escapeHtml(text('rejectionReason'))}" class="long-text-cell">${formatOptionalText(record.rejectionReason)}</td>
-          <td data-label="${escapeHtml(text('notes'))}" class="long-text-cell">${formatOptionalText(record.notes)}</td>
           <td data-label="${escapeHtml(text('candidateHome'))}">${candidateHomeLink(record)}</td>
           <td data-label="${escapeHtml(text('actions'))}">
             <div class="row-actions">
@@ -739,7 +736,7 @@ function statusBadge(status) {
 
 function candidateHomeLink(record) {
   if (!record.applicationUrl) return '';
-  return `<a class="table-link" href="${escapeHtml(record.applicationUrl)}" target="_blank" rel="noreferrer">${text('open')}</a>`;
+  return `<a class="table-link" href="${escapeHtml(record.applicationUrl)}" target="_blank" rel="noreferrer">链接</a>`;
 }
 
 function persist() {
