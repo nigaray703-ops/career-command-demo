@@ -224,10 +224,10 @@ body.is-signed-out .login-gate {
 }
 
 body.is-lang-en .login-copy h1 {
-  max-width: 1120px;
-  font-size: clamp(36px, 4.1vw, 56px);
-  line-height: 1.06;
-  white-space: normal;
+  max-width: 100%;
+  font-size: clamp(30px, 3.1vw, 43px);
+  line-height: 1.08;
+  white-space: nowrap;
 }
 
 body.is-lang-en .login-copy p {
