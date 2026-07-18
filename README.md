@@ -1,160 +1,163 @@
-Career Command Center
+# Career Command Center
 
-A privacy-safe bilingual job application tracker demo for managing applications, stages, candidate portals, follow-ups and overall job-search progress.
+A privacy-safe bilingual job application tracker demo for managing applications, stages, candidate portals and job-search progress.
 
-Repository type: Public portfolio demo
-Languages: English and Simplified Chinese
-Data: Fictional sample data only
-Authentication: Simulated Google sign-in
-Cloud connection: Disabled in this public repository
+> **Repository type:** Public portfolio demo  
+> **Languages:** English and Simplified Chinese  
+> **Data:** Fictional sample data only  
+> **Authentication:** Simulated Google sign-in  
+> **Cloud connection:** Disabled in this public repository  
 
-Career Command Center is a personal job application management system designed to centralise application records, reduce missed follow-ups and provide a clearer overview of job-search activity.
+## Overview
 
-This repository contains the public demonstration version of the project. It preserves the interface structure, visual design and core interactions of the private production version while replacing real authentication, cloud services and personal application records with fictional local data.
+Career Command Center is a bilingual job application management system designed to centralise application records, track application stages and provide a clearer overview of job-search activity.
 
-No real job application records, candidate portal links, personal documents, private email addresses or Supabase credentials are included in this repository.
+Job applications are often distributed across LinkedIn, SEEK, company career websites, recruiter emails and separate candidate portals. This can make it difficult to remember:
 
-Overview
+- which positions have already been applied for;
+- when each application was submitted;
+- which candidate portal belongs to each application;
+- whether a follow-up is required;
+- which applications progressed, remained unanswered or were rejected;
+- which platforms and role types produced better outcomes.
 
-Job applications are often distributed across LinkedIn, SEEK, company career websites, recruiter emails and separate candidate portals. This makes it difficult to remember:
-* which roles have already been applied for;
-* which candidate portal belongs to each application;
-* when an application was submitted;
-* whether a follow-up is required;
-* how many applications have progressed, remained unanswered or been rejected;
-* which platforms and role types generate better outcomes.
+This public repository preserves the interface, visual design and core interactions of the private production version while replacing real authentication, cloud services and personal records with fictional local data.
 
-Career Command Center provides a central workspace for recording, reviewing and organising this information.
+No real job application records, candidate portal links, resumes, private email addresses or Supabase credentials are included.
 
-The application combines a dashboard, searchable application records, bilingual interface controls, local JSON backups and privacy-safe demonstration data.
+---
 
-Project Goals
+## Live Demo
 
-The project was designed to:
-* centralise job application records in one interface;
-* track application stages and outcomes;
-* preserve candidate portal links and application notes;
-* reduce duplicate applications and missed follow-ups;
-* provide dashboard-level job-search statistics;
-* support both English and Chinese interfaces;
-* separate private production data from the public portfolio version;
-* allow local data backup and restoration;
-* remain simple enough for regular personal use.
+[Open the Career Command Center demo](https://nigaray703-ops.github.io/career-command-demo/)
 
-Public Demo and Private Version
+The Google sign-in button is simulated. It does not contact Google, use OAuth or connect to Supabase.
 
-This repository is a public demonstration environment.
+---
 
-The public demo and private production version share the same general interface structure and reusable application logic, but they use different authentication and data services.
+## Key Features
 
-Public demo
+### Bilingual Interface
 
-The public demo:
-* uses fictional application records;
-* uses simulated Google sign-in;
-* stores demonstration data locally;
-* does not connect to Supabase;
-* does not contain real candidate portal links;
-* does not contain private resumes or documents;
-* can be safely reviewed as a portfolio project.
+- English and Simplified Chinese
+- Interface language switching
+- Bilingual login, dashboard, forms and application records
 
-Private production version
+### Dashboard
 
-The private version is maintained separately and may include:
-* real application records;
-* private candidate portal links;
-* personal job-search notes;
-* authenticated user access;
-* cloud synchronisation;
-* personal backup data.
+- Total application count
+- Application-stage statistics
+- Progress and rejection indicators
+- Application distribution
+- Recent job-search activity
+- High-level conversion information
 
-The private production database and authentication configuration are not included in this repository.
-
-Key Features
-
-Bilingual Interface
-
-The application supports:
-* English;
-* Simplified Chinese;
-* interface language switching;
-* bilingual labels across the login screen, dashboard and application list.
-
-Dashboard
-
-The dashboard provides an overview of job-search activity, including:
-* total application records;
-* current application stages;
-* rejection and progress indicators;
-* application distribution;
-* recent activity;
-* high-level job-search conversion information.
-
-Application Management
+### Application Management
 
 Users can:
-* create new application records;
-* edit existing records;
-* delete demonstration records;
-* record company and position names;
-* record location and work arrangement;
-* record employment type;
-* record application platform;
-* store candidate portal links;
-* record application dates;
-* update application status;
-* add rejection reasons;
-* add additional notes.
 
-Search and Filtering
+- add application records;
+- edit existing records;
+- delete demonstration records;
+- record company and position names;
+- record location and work arrangement;
+- record employment type;
+- record application platform;
+- save candidate portal links;
+- record application dates;
+- update application status;
+- add rejection reasons and notes.
 
-The application supports:
-* keyword search;
-* company and position search;
-* status filtering;
-* employment-type filtering;
-* platform filtering;
-* sorting;
-* grouping application records.
+### Search and Organisation
 
-Local Data Management
-* download demonstration records as JSON;
-* upload compatible JSON backup files;
-* restore local demonstration data;
-* reset or modify fictional records without affecting any private database.
+- Keyword search
+- Company and position search
+- Status filtering
+- Employment-type filtering
+- Platform filtering
+- Sorting
+- Grouping
 
-Simulated Authentication
+### Local Data Management
 
-The login interface preserves the structure of the production login experience.
+- Download demonstration data as JSON
+- Upload compatible JSON backups
+- Restore fictional demonstration records
+- Modify local data without affecting a private database
+
+### Simulated Authentication
+
+The public demo preserves the login structure of the private production version.
 
 Selecting the Google sign-in button:
-* does not contact Google;
-* does not use OAuth;
-* does not connect to Supabase;
-* opens a simulated demonstration account.
 
-Interface Preview
+- does not contact Google;
+- does not use OAuth;
+- does not connect to Supabase;
+- opens a simulated demonstration account.
 
-Login
+---
 
-The login screen introduces the bilingual job application tracker and provides simulated access to the public demonstration account.
+## Interface Preview
 
-Dashboard
+### Login
+
+The login screen provides bilingual controls and simulated access to the demonstration account.
+
+![Career Command Center bilingual login preview](docs/images/career-command-demo-login-zh-en.png)
+
+### Dashboard
 
 The dashboard summarises application volume, stages, outcomes and recent activity.
 
-Applications
+![Career Command Center bilingual dashboard preview](docs/images/career-command-demo-dashboard-zh-en.png)
+
+### Applications
 
 The application list supports searching, filtering, sorting, grouping and editing fictional application records.
 
-Project Structure
+![Career Command Center bilingual applications preview](docs/images/career-command-demo-applications-zh-en.png)
 
+---
+
+## Public Demo and Private Version
+
+### Public Demo
+
+This repository:
+
+- uses fictional application records;
+- uses simulated Google sign-in;
+- stores demonstration data locally;
+- does not connect to Supabase;
+- does not contain real candidate portal links;
+- does not contain resumes or private documents;
+- is intended for public portfolio review.
+
+### Private Production Version
+
+The private version is maintained separately and may contain:
+
+- real job application records;
+- authenticated user access;
+- private candidate portal links;
+- personal job-search notes;
+- cloud synchronisation;
+- personal backup data.
+
+The production database, private records and authentication configuration are not included in this repository.
+
+---
+
+## Project Structure
+
+```text
 career-command-demo/
 ├── assets/
-│   └── Shared logos, icons and interface assets
+│   └── Logos, icons and shared interface assets
 ├── docs/
 │   └── images/
-│       └── README screenshots and bilingual interface previews
+│       └── README screenshots
 ├── src/
 │   ├── jobTrackerApp.js
 │   ├── jobTrackerCloud.js
@@ -163,188 +166,130 @@ career-command-demo/
 ├── .gitignore
 ├── index.html
 └── README.md
+```
 
-Main Files
+### Main Files
 
-index.html
+| File | Purpose |
+|---|---|
+| `index.html` | Public demo entry point containing the login cover and main application structure |
+| `src/jobTrackerApp.js` | Interface rendering, language switching, forms, modals and user interactions |
+| `src/jobTrackerCloud.js` | Simulated authentication and fictional local data |
+| `src/jobTrackerLogic.js` | Statistics, filtering, sorting, grouping and record-management logic |
+| `src/jobTrackerStyles.css` | Responsive styling for the login screen, dashboard, forms and application records |
+| `assets/` | Shared logos, icons and visual assets |
+| `docs/images/` | Screenshots displayed in this README |
 
-The public demo entry point.
+---
 
-It contains the login cover and the main application page structure.
-
-src/jobTrackerApp.js
-
-Controls the main application interface and interaction flow, including:
-* rendering;
-* form interactions;
-* dashboard updates;
-* language switching;
-* application list behaviour;
-* modal controls;
-* user actions.
-
-src/jobTrackerCloud.js
-
-Provides the public demo data layer.
-
-In this repository, it:
-* simulates authentication;
-* loads fictional local data;
-* avoids Supabase connections;
-* replaces private cloud functionality;
-* keeps the demonstration environment isolated from production data.
-
-src/jobTrackerLogic.js
-
-Contains reusable application logic, including:
-
-* application statistics;
-* filtering;
-* sorting;
-* grouping;
-* record creation;
-* record updates;
-* data transformations.
-
-src/jobTrackerStyles.css
-
-Contains the shared interface styling, including:
-
-* responsive layouts;
-* dashboard styling;
-* login screen styling;
-* application cards and tables;
-* forms and modal windows;
-* bilingual interface states.
-
-assets/
-
-Contains shared visual assets, including:
-
-* logos;
-* icons;
-* interface graphics.
-
-docs/images/
-
-Contains screenshots used in this README.
-
-Architecture
+## Architecture
 
 The project separates reusable application logic from environment-specific data services.
 
+```text
 User Interface
+      │
       ▼
 jobTrackerApp.js
+      │
       ├── jobTrackerLogic.js
       │     ├── statistics
       │     ├── filtering
       │     ├── sorting
+      │     ├── grouping
       │     └── record management
+      │
       └── jobTrackerCloud.js
-            ├── simulated login
+            ├── simulated authentication
             ├── fictional local data
-            └── JSON import/export
+            └── JSON import and export
+```
 
-This separation allows the public demo to remain visually and functionally aligned with the private production version without exposing:
-* personal job-search information;
-* private authentication settings;
-* database credentials;
-* cloud configuration;
-* sensitive candidate portal links.
+This separation allows the public demo to remain aligned with the private production application without exposing:
 
-Technology
+- personal job-search information;
+- private authentication settings;
+- database credentials;
+- cloud configuration;
+- sensitive candidate portal links.
 
-The current public demo uses:
-* HTML5;
-* CSS3;
-* JavaScript;
-* local browser data;
-* JSON import and export;
-* responsive web design;
-* bilingual interface logic;
-* modular application scripts.
+---
 
-The public repository does not require:
-* Supabase;
-* Google OAuth;
-* a backend server;
-* a database account;
-* private environment variables.
+## Technology
 
-Running the Demo
+- HTML5
+- CSS3
+- JavaScript
+- Responsive web design
+- Browser-based local data
+- JSON import and export
+- Bilingual interface logic
+- Modular application scripts
+- GitHub Pages
 
-Option 1: Open Directly
+The public demo does not require Supabase, Google OAuth, a backend server, a database account or private environment variables.
 
-Download or clone the repository and open:
+---
 
-index.html
+## Running Locally
 
-in a modern browser.
+Clone the repository:
 
-Option 2: Use a Local Development Server
-
-Running a local server is recommended if the browser restricts local file behaviour.
-
-For example, with Python: python3 -m http.server 8000
-
-Then open: http://localhost:8000
-
-Option 3: Clone with Git
-
+```bash
 git clone https://github.com/nigaray703-ops/career-command-demo.git
 cd career-command-demo
+```
+
+Start a local server:
+
+```bash
 python3 -m http.server 8000
+```
 
-Then open: http://localhost:8000
+Open:
 
-Demo Usage
+```text
+http://localhost:8000
+```
+
+---
+
+## Demo Usage
+
 1. Open the application.
 2. Select English or Chinese.
 3. Click the Google sign-in button.
 4. Enter the simulated demonstration account.
-5. Review dashboard statistics.
-6. Search or filter application records.
+5. Review the dashboard statistics.
+6. Search, filter or group application records.
 7. Add, edit or delete fictional records.
-8. Download the data as a JSON backup.
-9. Upload a compatible demo JSON file to restore records.
+8. Download the demonstration data as JSON.
+9. Upload a compatible demonstration backup when required.
 
-The Google sign-in button is part of the demonstration interface only. It does not perform real Google authentication.
+The simulated sign-in process does not access any real Google account.
 
-JSON Backup
+---
 
-The public demo supports local JSON backup and restoration.
-
-This allows users to:
-* download a copy of demonstration records;
-* modify the demo without affecting the original repository;
-* restore compatible sample data;
-* test import and export behaviour.
-
-Uploaded JSON files should follow the structure expected by the application.
-
-Do not upload private job-search backups when using the public demo on a shared or public device.
-
-Privacy and Security
+## Privacy and Security
 
 This repository is designed as a privacy-safe portfolio demonstration.
 
 It does not intentionally include:
-* real job application records;
-* real candidate portal URLs;
-* personal email account data;
-* resumes or cover letters;
-* recruiter communications;
-* Supabase project credentials;
-* Google OAuth credentials;
-* production environment variables;
-* private API keys;
-* production database exports.
 
-Important
+- real job application records;
+- real candidate portal URLs;
+- personal email account data;
+- resumes or cover letters;
+- recruiter communications;
+- Supabase credentials;
+- Google OAuth credentials;
+- production environment variables;
+- private API keys;
+- production database exports.
 
-Do not commit any of the following to this repository:
+### Do Not Commit
 
+```text
 .env
 .env.local
 Supabase service keys
@@ -354,212 +299,120 @@ personal resumes
 candidate portal credentials
 private email addresses
 production database exports
+```
 
 Before publishing changes, review:
-* Git status;
-* committed files;
-* .gitignore;
-* browser storage;
-* screenshot content;
-* JSON sample data;
-* repository history.
 
-Removing a sensitive file from the latest commit may not remove it from Git history. Credentials exposed in Git history should be revoked and replaced.
+- Git status
+- Committed files
+- `.gitignore`
+- Screenshots
+- JSON demonstration data
+- Browser storage
+- Repository history
 
-Data Disclaimer
+Removing a sensitive file from the latest commit may not remove it from Git history. Exposed credentials should be revoked and replaced.
 
-All companies, job titles, dates, application statuses, portal links and notes shown in the public demo should be treated as fictional demonstration content.
+---
 
-Any resemblance to real applications or organisations is incidental unless explicitly stated otherwise.
+## Data Disclaimer
 
-The project is not affiliated with:
+All companies, positions, dates, statuses, links and notes shown in the public demo are fictional demonstration content.
 
-* Google;
-* LinkedIn;
-* SEEK;
-* Supabase;
-* any employer represented in fictional demo data.
+This project is not affiliated with Google, LinkedIn, SEEK, Supabase or any employer represented in the fictional demonstration data.
 
-Current Status
+---
 
-Public demo status: Functional and available for portfolio review.
+## Project Status
+
+**Public demo status: Functional and available for portfolio review.**
 
 The current version includes:
-* bilingual login and application interfaces;
-* simulated authentication;
-* dashboard statistics;
-* searchable application records;
-* filtering, sorting and grouping;
-* record creation and editing;
-* record deletion;
-* JSON import and export;
-* responsive interface styling;
-* fictional demonstration data.
+
+- bilingual login and application interfaces;
+- simulated authentication;
+- dashboard statistics;
+- searchable application records;
+- filtering, sorting and grouping;
+- record creation, editing and deletion;
+- JSON import and export;
+- responsive desktop and mobile layouts;
+- fictional demonstration data.
 
 The private production version continues to be maintained separately.
 
-Planned Improvements
+---
 
-Potential future improvements include:
-* stronger JSON import validation;
-* clearer import error reporting;
-* more detailed interview-stage tracking;
-* follow-up reminders;
-* improved mobile application cards;
-* expanded conversion metrics;
-* improved keyboard navigation;
-* accessibility review;
-* additional data visualisations;
-* automated tests for core application logic;
-* clearer separation between demonstration and production configuration.
+## Planned Improvements
 
-These items are planned directions and may not yet be implemented.
+- Stronger JSON import validation
+- Clearer import error reporting
+- More detailed interview-stage tracking
+- Improved mobile application cards
+- Expanded conversion metrics
+- Keyboard-navigation improvements
+- Accessibility review
+- Automated tests for core application logic
 
-Design Considerations
+These are planned directions and may not yet be implemented.
 
-The project was developed around several product and workflow considerations.
+---
 
-Privacy by Design
+## Skills Demonstrated
 
-The public version was created as a separate demonstration environment instead of publishing the real personal tracker.
+- Business process analysis
+- Workflow design
+- Requirements translation
+- Interface prototyping
+- Bilingual product design
+- JavaScript application logic
+- Responsive web design
+- Local data management
+- JSON import and export
+- Privacy-conscious product design
+- Public and private environment separation
+- Iterative interface improvement
+- Git and GitHub version control
 
-Environment Separation
+---
 
-Authentication and cloud functionality are separated from reusable interface and business logic.
+## 中文说明
 
-Daily Usability
+Career Command Center 是一个中英文求职申请追踪器，用于集中管理求职申请记录、申请阶段、候选人中心链接和求职进度。
 
-The interface prioritises fast record updates, filtering and status review over unnecessary complexity.
+### 主要功能
 
-Portability
+- 中英文界面切换
+- 模拟 Google 登录
+- 首页数据仪表盘
+- 公司和岗位搜索
+- 申请状态筛选
+- 排序和分组
+- 添加、编辑和删除演示记录
+- JSON 数据下载与上传
+- 桌面端和移动端响应式布局
 
-JSON backup allows records to be moved or restored without requiring a permanent backend connection.
+### 公开演示版
 
-Bilingual Access
-
-The interface supports both English and Chinese to improve usability across different working contexts.
-
-Skills Demonstrated
-
-This project demonstrates experience with:
-
-* business process analysis;
-* workflow design;
-* requirements translation;
-* interface prototyping;
-* bilingual product design;
-* JavaScript application logic;
-* responsive web design;
-* local data management;
-* JSON import and export;
-* data privacy planning;
-* public and private environment separation;
-* iterative interface improvement;
-* Git and GitHub version control.
-
-Repository Use
-
-This repository is intended for:
-* portfolio review;
-* interface demonstration;
-* learning and experimentation;
-* code review;
-* local testing.
-
-It is not intended to store real personal job-search data.
-
-Licence
-
-No licence has currently been specified unless a LICENSE file is added to the repository.
-
-Without an explicit licence, the source code remains protected by default copyright rules and should not be assumed to be available for unrestricted reuse, redistribution or commercial use.
-
-中文说明
-
-项目介绍
-
-Career Command Center 是一个中英文求职申请追踪器，用于集中管理：
-
-已投递职位；
-* 已投递职位；
-* 公司和岗位信息；
-* 申请日期；
-* 申请平台；
-* 候选人中心链接；
-* 当前申请状态；
-* 被拒原因；
-* 面试进度；
-* 补充备注；
-* 求职统计数据。
-
-这个仓库是公开的 GitHub 演示版。
-
-演示版保留了私人正式版的主要界面结构、视觉样式和核心交互，但只使用虚构示例数据。
+这个仓库是公开的 GitHub 演示版。演示版保留了私人正式版的主要界面结构、视觉样式和核心交互，但只使用虚构示例数据。
 
 本仓库不包含：
-* 真实求职记录；
-* 真实候选人中心链接；
-* 个人简历；
-* 招聘邮件；
-* Supabase 登录配置；
-* Google OAuth 配置；
-* 私人数据库；
-* 真实云端备份。
 
-演示版功能
+- 真实求职记录
+- 真实候选人中心链接
+- 个人简历或求职信
+- 招聘邮件
+- Supabase 登录配置
+- Google OAuth 配置
+- 私人数据库
+- 真实云端备份
 
-演示版目前支持：
-* 中英文语言切换；
-* 模拟 Google 登录；
-* 查看首页仪表盘；
-* 查看申请统计；
-* 搜索公司或岗位；
-* 按状态筛选申请；
-* 排序和分组申请记录；
-* 添加演示申请；
-* 编辑演示申请；
-* 删除演示申请；
-* 下载 JSON 备份；
-* 上传兼容的演示 JSON 数据；
-* 响应式桌面和移动端界面。
+请不要向这个公开仓库提交真实个人数据、密钥、`.env` 文件或私人 JSON 备份。
 
-点击“使用 Google 登录”后，只会进入演示账号，不会连接真实 Google 账号或 Supabase。
+---
 
-文件说明
-* index.html：演示版入口，包含登录封面和主页面结构；
-* src/jobTrackerApp.js：负责界面渲染和主要交互；
-* src/jobTrackerCloud.js：负责模拟登录和本地虚构数据，不连接 Supabase；
-* src/jobTrackerLogic.js：负责统计、筛选、排序、分组和记录管理；
-* src/jobTrackerStyles.css：负责页面视觉样式和响应式布局；
-* assets/：保存通用 Logo、图标和视觉资源；
-* docs/images/：保存 README 使用的中英文界面截图。
+## Licence
 
-使用方式
+No licence has currently been specified.
 
-可以直接下载仓库并打开： index.html
-
-也可以启动本地服务器： python3 -m http.server 8000
-
-然后在浏览器中访问： http://localhost:8000
-
-隐私说明
-
-请不要向这个公开仓库提交：
-* 真实求职数据；
-* 真实候选人中心链接；
-* 个人邮箱；
-* 简历或求职信；
-* 招聘人员联系方式；
-* Supabase 密钥；
-* Google OAuth 密钥；
-* .env 文件；
-* 私人 JSON 备份；
-* 数据库导出文件。
-
-公开演示版应始终只使用虚构示例数据。
-
-项目状态
-
-当前公开演示版已经可以用于 GitHub 作品集展示。
-
-私人正式版与公开演示版分开维护，真实数据不会进入此公开仓库。
+Without an explicit `LICENSE` file, the source code remains protected under default copyright rules and should not be assumed to be available for unrestricted reuse, redistribution or commercial use.
