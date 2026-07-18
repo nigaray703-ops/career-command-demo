@@ -1,0 +1,24 @@
+{
+  "name": "求职申请追踪器",
+  "short_name": "求职追踪",
+  "description": "记录投递状态、候选人中心、面试进度和转化情况。",
+  "start_url": "/job-tracker.html",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f8fbff",
+  "theme_color": "#2563eb",
+  "icons": [
+    {
+      "src": "/assets/job-tracker-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/job-tracker-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

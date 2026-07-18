@@ -8,6 +8,7 @@ export const APPLICATION_STATUSES = [
 
 export const DISPLAY_STATUSES = APPLICATION_STATUSES;
 export const WORK_MODES = ['待确认', '远程办公', '混合办公', '现场办公'];
+export const EMPLOYMENT_TYPES = ['待确认', '全职', '兼职', '自由岗'];
 const LEGACY_WORK_MODES = ['远程', '远程/新西兰'];
 export const PRIORITIES = ['高', '中', '低'];
 export const seedApplications = [];
@@ -22,12 +23,14 @@ export function createApplication(input = {}) {
     roleCategory: input.roleCategory || '',
     industry: input.industry || '',
     workMode: [...WORK_MODES, ...LEGACY_WORK_MODES].includes(input.workMode) ? input.workMode : '待确认',
+    employmentType: EMPLOYMENT_TYPES.includes(input.employmentType) ? input.employmentType : '待确认',
     platform: input.platform || '',
     applicationUrl: input.applicationUrl || '',
     appliedDate: input.appliedDate || '',
     appliedDateNote: input.appliedDateNote || '',
     status: normalizeStatus(input.status),
     priority: PRIORITIES.includes(input.priority) ? input.priority : '中',
+    rejectionReason: input.rejectionReason || '',
     notes: input.notes || '',
     createdAt: input.createdAt || now,
     updatedAt: input.updatedAt || now,
@@ -43,8 +46,10 @@ export function filterApplications(records, filters = {}) {
       record.location,
       record.roleCategory,
       record.industry,
+      record.employmentType,
       record.platform,
       record.appliedDateNote,
+      record.rejectionReason,
       record.notes,
     ].join(' '));
     const matchesQuery = !query || searchable.includes(query);
@@ -173,6 +178,7 @@ function sortValue(record, key) {
     roleCategory: record.roleCategory,
     industry: record.industry,
     workMode: record.workMode,
+    employmentType: record.employmentType,
     platform: record.platform,
     appliedDate: record.appliedDate,
     status: record.status,

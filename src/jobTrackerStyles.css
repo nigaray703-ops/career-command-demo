@@ -502,17 +502,6 @@ body.is-signed-out .login-gate {
   background: #e5e7eb;
 }
 
-.demo-avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #2563eb, #16a34a);
-  color: #ffffff;
-  display: grid;
-  place-items: center;
-  font-weight: 900;
-}
-
 .cloud-profile strong {
   display: block;
   overflow: hidden;
