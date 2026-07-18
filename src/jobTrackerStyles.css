@@ -223,6 +223,17 @@ body.is-signed-out .login-gate {
   white-space: nowrap;
 }
 
+body.is-lang-en .login-copy h1 {
+  max-width: 1120px;
+  font-size: clamp(36px, 4.1vw, 56px);
+  line-height: 1.06;
+  white-space: normal;
+}
+
+body.is-lang-en .login-copy p {
+  white-space: normal;
+}
+
 .login-actions {
   grid-area: actions;
   align-self: end;
