@@ -138,6 +138,7 @@ const i18n = {
     optional: '可选',
     platformPlaceholder: 'LinkedIn、Seek、公司官网',
     urlPlaceholder: '只保留完全正确的网址',
+    allInitials: '全',
     rejectionReasonPlaceholder: '手动填写被拒原因',
     notesPlaceholder: '额外备注',
     cancel: '取消',
@@ -252,6 +253,7 @@ const i18n = {
     optional: 'Optional',
     platformPlaceholder: 'LinkedIn, SEEK, company site',
     urlPlaceholder: 'Only keep fully verified URLs',
+    allInitials: 'All',
     rejectionReasonPlaceholder: 'Write the rejection reason manually',
     notesPlaceholder: 'Extra notes',
     cancel: 'Cancel',
@@ -278,7 +280,7 @@ const state = {
   lastSyncedAt: '',
   language: localStorage.getItem(LANGUAGE_STORAGE_KEY) || 'zh',
   view: getInitialView(),
-  filters: { query: '', status: 'all' },
+  filters: { query: '', status: 'all', initial: 'all' },
   sort: getInitialSort(),
   pendingDeleteId: '',
   formSnapshot: '',
@@ -312,6 +314,7 @@ const els = {
   statusBars: document.querySelector('#statusBars'),
   rateCards: document.querySelector('#rateCards'),
   applicationRows: document.querySelector('#applicationRows'),
+  alphabetIndex: document.querySelector('#alphabetIndex'),
   emptyState: document.querySelector('#emptyState'),
   search: document.querySelector('#applicationSearch'),
   statusFilter: document.querySelector('#statusFilter'),
@@ -411,6 +414,12 @@ function bindEvents() {
   });
   els.statusFilter.addEventListener('change', (event) => {
     state.filters.status = event.target.value;
+    renderApplications();
+  });
+  els.alphabetIndex?.addEventListener('click', (event) => {
+    const button = event.target.closest('[data-initial]');
+    if (!button || button.disabled) return;
+    state.filters.initial = button.dataset.initial;
     renderApplications();
   });
   els.sortBy.addEventListener('change', (event) => {
@@ -656,8 +665,11 @@ function displayStatusTotal(stats) {
 }
 
 function renderApplications() {
+  const baseFilters = { ...state.filters, initial: 'all' };
+  const baseVisible = filterApplications(state.applications, baseFilters);
   const visible = sortApplications(filterApplications(state.applications, state.filters), state.sort);
   const groups = groupApplications(visible, state.sort.groupBy);
+  renderAlphabetIndex(baseVisible);
   els.applicationRows.innerHTML = groups.map((group) => {
     const groupHeader = group.label ? `
       <tr class="group-row">
@@ -685,6 +697,23 @@ function renderApplications() {
     return `${groupHeader}${rows}`;
   }).join('');
   els.emptyState.hidden = visible.length > 0;
+}
+
+function renderAlphabetIndex(records) {
+  if (!els.alphabetIndex) return;
+  const available = new Set(records.map((record) => companyInitial(record.companyName)));
+  const letters = ['all', ...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'];
+  els.alphabetIndex.innerHTML = letters.map((letter) => {
+    const active = state.filters.initial === letter;
+    const disabled = letter !== 'all' && !available.has(letter);
+    const label = letter === 'all' ? text('allInitials') : letter;
+    return `<button type="button" data-initial="${letter}" class="${active ? 'active' : ''}" ${disabled ? 'disabled' : ''}>${escapeHtml(label)}</button>`;
+  }).join('');
+}
+
+function companyInitial(value) {
+  const initial = String(value || '').trim().slice(0, 1).toUpperCase();
+  return /^[A-Z]$/.test(initial) ? initial : '#';
 }
 
 function openForm(record = null) {
@@ -838,8 +867,8 @@ function modeLabel(mode) {
 
 function employmentTypeLabel(type) {
   const labels = {
-    en: { 待确认: 'TBC', 全职: 'Full-time', 兼职: 'Part-time', 自由岗: 'Freelance' },
-    zh: { 待确认: '待确认', 全职: '全职', 兼职: '兼职', 自由岗: '自由岗' },
+    en: { 待确认: 'TBC', 全职: 'Full-time', 兼职: 'Part-time', 固定期限: 'Fixed-term', 合同工: 'Contract', 临时工: 'Temporary', 实习: 'Internship', 自由职业: 'Freelance', 自由岗: 'Freelance' },
+    zh: { 待确认: '待确认', 全职: '全职', 兼职: '兼职', 固定期限: '固定期限', 合同工: '合同工', 临时工: '临时工', 实习: '实习', 自由职业: '自由职业', 自由岗: '自由职业' },
   };
   return labels[state.language][type] || type;
 }

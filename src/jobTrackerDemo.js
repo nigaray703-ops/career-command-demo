@@ -1,5 +1,6 @@
 import {
   APPLICATION_STATUSES,
+  EMPLOYMENT_TYPES,
   WORK_MODES,
   calculateDashboardStats,
   createApplication,
@@ -32,6 +33,7 @@ const seedApplications = [
     roleTitle: 'Operations Coordinator',
     location: 'Auckland',
     workMode: '混合办公',
+    employmentType: '全职',
     platform: 'LinkedIn',
     applicationUrl: 'https://example.com/candidate/aurora',
     appliedDate: '2026-06-03',
@@ -43,6 +45,7 @@ const seedApplications = [
     roleTitle: 'Product Assistant',
     location: 'Wellington',
     workMode: '远程办公',
+    employmentType: '固定期限',
     platform: 'Company Careers',
     applicationUrl: 'https://example.com/candidate/summit',
     appliedDate: '2026-06-05',
@@ -54,6 +57,7 @@ const seedApplications = [
     roleTitle: 'Junior Business Analyst',
     location: 'Christchurch',
     workMode: '现场办公',
+    employmentType: '合同工',
     platform: 'SEEK',
     applicationUrl: 'https://example.com/candidate/harbour',
     appliedDate: '2026-06-09',
@@ -65,6 +69,7 @@ const seedApplications = [
     roleTitle: 'Customer Success Specialist',
     location: 'Auckland',
     workMode: '混合办公',
+    employmentType: '全职',
     platform: 'Indeed',
     applicationUrl: 'https://example.com/candidate/nova',
     appliedDate: '2026-06-12',
@@ -76,6 +81,7 @@ const seedApplications = [
     roleTitle: 'Marketing Coordinator',
     location: 'Remote',
     workMode: '远程办公',
+    employmentType: '自由职业',
     platform: 'Referral',
     applicationUrl: 'https://example.com/candidate/kinetic',
     appliedDate: '2026-06-14',
@@ -87,6 +93,7 @@ const seedApplications = [
     roleTitle: 'Administration Assistant',
     location: 'Hamilton',
     workMode: '现场办公',
+    employmentType: '临时工',
     platform: 'Company Careers',
     applicationUrl: '',
     appliedDate: '2026-06-17',
@@ -128,6 +135,7 @@ const els = {
   dialogTitle: document.querySelector('#dialogTitle'),
   statusOptions: document.querySelector('#statusOptions'),
   workModeOptions: document.querySelector('#workModeOptions'),
+  employmentTypeOptions: document.querySelector('#employmentTypeOptions'),
 };
 
 initialize();
@@ -143,6 +151,7 @@ function initializeOptions() {
   els.statusFilter.innerHTML = option('all', '全部状态') + APPLICATION_STATUSES.map((status) => option(status, status)).join('');
   els.statusOptions.innerHTML = APPLICATION_STATUSES.map((status) => option(status, status)).join('');
   els.workModeOptions.innerHTML = WORK_MODES.map((mode) => option(mode, mode)).join('');
+  els.employmentTypeOptions.innerHTML = EMPLOYMENT_TYPES.map((type) => option(type, type)).join('');
   els.sortBy.value = state.sort.sortBy;
   els.sortDirection.value = state.sort.sortDirection;
   els.groupBy.value = state.sort.groupBy;
@@ -274,7 +283,7 @@ function renderApplications() {
   els.emptyState.hidden = filtered.length > 0;
 
   els.applicationRows.innerHTML = groups.map((group) => {
-    const heading = group.label ? `<tr class="group-row"><td colspan="9">${group.label}</td></tr>` : '';
+    const heading = group.label ? `<tr class="group-row"><td colspan="10">${group.label}</td></tr>` : '';
     const rows = group.records.map((record) => `
       <tr>
         <td><strong>${escapeHtml(record.companyName)}</strong></td>
@@ -284,6 +293,7 @@ function renderApplications() {
         <td>${escapeHtml(record.platform)}</td>
         <td>${escapeHtml(record.location)}</td>
         <td>${escapeHtml(record.workMode)}</td>
+        <td>${escapeHtml(record.employmentType)}</td>
         <td>${record.applicationUrl ? `<a href="${escapeAttribute(record.applicationUrl)}" target="_blank" rel="noreferrer">打开</a>` : ''}</td>
         <td>
           <div class="row-actions">
@@ -306,6 +316,7 @@ function openForm(record) {
   els.form.elements.roleTitle.value = item.roleTitle;
   els.form.elements.location.value = item.location;
   els.form.elements.workMode.value = item.workMode;
+  els.form.elements.employmentType.value = item.employmentType;
   els.form.elements.platform.value = item.platform;
   els.form.elements.applicationUrl.value = item.applicationUrl;
   els.form.elements.appliedDate.value = item.appliedDate;

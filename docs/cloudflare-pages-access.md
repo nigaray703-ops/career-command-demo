@@ -13,7 +13,7 @@
 本地演示仓库路径：
 
 ```text
-/Users/nigarayaskar/本地项目/求职追踪器/demo-github
+<你的本地项目路径>/demo-github
 ```
 
 ## 2. Cloudflare Pages

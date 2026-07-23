@@ -8,8 +8,9 @@ export const APPLICATION_STATUSES = [
 
 export const DISPLAY_STATUSES = APPLICATION_STATUSES;
 export const WORK_MODES = ['待确认', '远程办公', '混合办公', '现场办公'];
-export const EMPLOYMENT_TYPES = ['待确认', '全职', '兼职', '自由岗'];
+export const EMPLOYMENT_TYPES = ['待确认', '全职', '兼职', '固定期限', '合同工', '临时工', '实习', '自由职业'];
 const LEGACY_WORK_MODES = ['远程', '远程/新西兰'];
+const LEGACY_EMPLOYMENT_TYPES = { 自由岗: '自由职业' };
 export const PRIORITIES = ['高', '中', '低'];
 export const seedApplications = [];
 
@@ -23,7 +24,7 @@ export function createApplication(input = {}) {
     roleCategory: input.roleCategory || '',
     industry: input.industry || '',
     workMode: [...WORK_MODES, ...LEGACY_WORK_MODES].includes(input.workMode) ? input.workMode : '待确认',
-    employmentType: EMPLOYMENT_TYPES.includes(input.employmentType) ? input.employmentType : '待确认',
+    employmentType: normalizeEmploymentType(input.employmentType),
     platform: input.platform || '',
     applicationUrl: input.applicationUrl || '',
     appliedDate: input.appliedDate || '',
@@ -39,6 +40,7 @@ export function createApplication(input = {}) {
 
 export function filterApplications(records, filters = {}) {
   const query = normalize(filters.query);
+  const initial = normalizeInitial(filters.initial);
   return records.filter((record) => {
     const searchable = normalize([
       record.companyName,
@@ -54,7 +56,8 @@ export function filterApplications(records, filters = {}) {
     ].join(' '));
     const matchesQuery = !query || searchable.includes(query);
     const matchesStatus = !filters.status || filters.status === 'all' || record.status === filters.status;
-    return matchesQuery && matchesStatus;
+    const matchesInitial = initial === 'all' || companyInitial(record.companyName) === initial;
+    return matchesQuery && matchesStatus && matchesInitial;
   });
 }
 
@@ -168,6 +171,23 @@ function roundRate(value) {
 
 function normalize(value) {
   return String(value || '').trim().toLowerCase();
+}
+
+function normalizeInitial(value) {
+  const initial = String(value || 'all').trim().toUpperCase();
+  return /^[A-Z]$/.test(initial) ? initial : 'all';
+}
+
+function companyInitial(value) {
+  const initial = String(value || '').trim().slice(0, 1).toUpperCase();
+  return /^[A-Z]$/.test(initial) ? initial : '#';
+}
+
+function normalizeEmploymentType(type) {
+  const normalized = String(type || '').trim();
+  if (EMPLOYMENT_TYPES.includes(normalized)) return normalized;
+  if (LEGACY_EMPLOYMENT_TYPES[normalized]) return LEGACY_EMPLOYMENT_TYPES[normalized];
+  return '待确认';
 }
 
 function sortValue(record, key) {
