@@ -1007,13 +1007,13 @@ textarea {
 
 table {
   width: 100%;
-  min-width: 940px;
+  min-width: 1040px;
   border-collapse: collapse;
   table-layout: fixed;
 }
 
 .applications-view table {
-  min-width: 940px;
+  min-width: 1040px;
 }
 
 .compact table {
@@ -1069,12 +1069,12 @@ tbody tr:hover {
 
 .applications-view td:nth-child(1),
 .applications-view th:nth-child(1) {
-  width: 15%;
+  width: 14%;
 }
 
 .applications-view td:nth-child(2),
 .applications-view th:nth-child(2) {
-  width: 21%;
+  width: 18%;
 }
 
 .applications-view td:nth-child(3),
@@ -1089,7 +1089,7 @@ tbody tr:hover {
 
 .applications-view td:nth-child(5),
 .applications-view th:nth-child(5) {
-  width: 10%;
+  width: 8%;
 }
 
 .applications-view td:nth-child(6),
@@ -1104,7 +1104,7 @@ tbody tr:hover {
 
 .applications-view td:nth-child(8),
 .applications-view th:nth-child(8) {
-  width: 6%;
+  width: 12%;
 }
 
 .applications-view td:nth-child(9),
@@ -1351,7 +1351,7 @@ dialog::backdrop {
   }
 
   .applications-view table {
-    min-width: 860px;
+    min-width: 1040px;
   }
 }
 

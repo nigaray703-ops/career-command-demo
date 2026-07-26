@@ -765,7 +765,7 @@ function statusBadge(status) {
 
 function candidateHomeLink(record) {
   if (!record.applicationUrl) return '';
-  return `<a class="table-link" href="${escapeHtml(record.applicationUrl)}" target="_blank" rel="noreferrer">链接</a>`;
+  return `<a class="table-link" href="${escapeHtml(record.applicationUrl)}" target="_blank" rel="noreferrer">${text('open')}</a>`;
 }
 
 function persist() {
