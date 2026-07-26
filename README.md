@@ -108,7 +108,7 @@ The login screen provides bilingual controls and simulated access to the demonst
 
 ### Dashboard
 
-The dashboard summarises application volume, stages, outcomes and recent activity.
+The dashboard summarises application volume, stages, outcomes and conversion rates.
 
 ![Career Command Center bilingual dashboard preview](docs/images/career-command-demo-dashboard-zh-en.png)
 
