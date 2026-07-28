@@ -9,7 +9,9 @@ assert.match(
   /@media \(min-width: 521px\) and \(max-width: 820px\)/,
   'half-screen rules should use an explicit 521px–820px boundary',
 );
-assert.match(css, /\.metric-grid\s*\{[^}]*grid-template-columns:\s*repeat\(3,\s*minmax\(0,\s*1fr\)\)/s);
+assert.match(css, /\.metric-grid\s*\{[^}]*grid-template-columns:\s*repeat\(12,\s*minmax\(0,\s*1fr\)\)/s);
+assert.match(css, /\.metric-card:nth-child\(-n \+ 3\)\s*\{[^}]*grid-column:\s*span 4/s);
+assert.match(css, /\.metric-card:nth-child\(n \+ 4\)\s*\{[^}]*grid-column:\s*span 3/s);
 assert.match(css, /\.dashboard-grid\s*\{[^}]*grid-template-columns:\s*1fr/s);
 assert.match(
   css,
