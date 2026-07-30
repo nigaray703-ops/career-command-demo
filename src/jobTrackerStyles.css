@@ -1795,7 +1795,8 @@ body.auth-pending .alphabet-index {
   }
 }
 
-@media (min-width: 521px) and (max-width: 820px) {
+/* Shared phone and half-screen structure */
+@media (max-width: 820px) {
   .tracker-shell {
     grid-template-columns: 1fr;
   }
@@ -2109,5 +2110,262 @@ body.auth-pending .alphabet-index {
 
   .applications-view .alphabet-index {
     right: 4px;
+  }
+}
+
+/* Phone five-column compaction */
+@media (max-width: 520px) {
+  .sidebar {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    padding: 9px 10px;
+    gap: 7px 9px;
+  }
+
+  .brand {
+    font-size: 12px;
+  }
+
+  body.is-lang-en .brand {
+    font-size: 11px;
+  }
+
+  .side-nav {
+    gap: 4px;
+  }
+
+  .nav-item {
+    min-width: 0;
+    padding: 7px 4px;
+    font-size: 10px;
+    text-align: center;
+  }
+
+  .sidebar-account {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+    padding: 8px;
+  }
+
+  .sidebar-account .sidebar-actions {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 4px;
+  }
+
+  .sidebar-actions .ghost-button {
+    min-height: 30px;
+    padding-inline: 3px;
+    font-size: 8px;
+  }
+
+  .workspace {
+    padding: 9px 10px 16px;
+    gap: 10px;
+  }
+
+  .topbar {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 7px;
+  }
+
+  .topbar h1 {
+    font-size: 19px;
+  }
+
+  body.is-lang-en .topbar h1 {
+    font-size: 18px;
+  }
+
+  .topbar p {
+    font-size: 10px;
+  }
+
+  .topbar-actions {
+    display: flex;
+    gap: 5px;
+  }
+
+  .language-switch {
+    min-width: 0;
+    padding-inline: 7px;
+  }
+
+  .topbar-actions .primary-button {
+    min-height: 36px;
+    padding-inline: 9px;
+    font-size: 10px;
+  }
+
+  .view.active {
+    gap: 10px;
+  }
+
+  .metric-grid {
+    gap: 5px;
+  }
+
+  .metric-card {
+    min-height: 86px;
+    padding: 8px;
+    gap: 5px;
+  }
+
+  .metric-card span,
+  .metric-card small {
+    font-size: 8px;
+  }
+
+  .metric-card strong {
+    font-size: 19px;
+  }
+
+  body.is-lang-en .metric-card span,
+  body.is-lang-en .metric-card small {
+    font-size: 7px;
+  }
+
+  body.is-lang-en .metric-card strong {
+    font-size: 18px;
+  }
+
+  .chart-panel,
+  .rate-panel {
+    padding: 10px;
+  }
+
+  .panel-head {
+    margin-bottom: 8px;
+  }
+
+  .chart-layout {
+    grid-template-columns: minmax(82px, 0.72fr) minmax(0, 1.28fr);
+    gap: 8px;
+  }
+
+  .donut {
+    width: 82px;
+  }
+
+  .donut span {
+    font-size: 18px;
+  }
+
+  .status-bars {
+    gap: 5px;
+  }
+
+  .bar-label {
+    font-size: 9px;
+  }
+
+  .rate-stack {
+    gap: 5px;
+    margin-top: 8px;
+  }
+
+  .rate-card {
+    min-height: 78px;
+    padding: 8px;
+    gap: 7px;
+  }
+
+  .rate-card strong {
+    font-size: 19px;
+  }
+
+  .applications-view.active {
+    padding-right: 22px;
+  }
+
+  .applications-view .panel {
+    padding: 8px;
+  }
+
+  .applications-view .toolbar {
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 0.7fr) minmax(0, 0.7fr);
+    gap: 5px;
+  }
+
+  .applications-view .search-field,
+  .applications-view .tool-select,
+  .applications-view #statusFilter {
+    min-height: 34px;
+    font-size: 9px;
+  }
+
+  .applications-view thead tr,
+  .applications-view tbody tr:not(.group-row) {
+    grid-template-columns:
+      minmax(0, 1.35fr)
+      minmax(0, 0.72fr)
+      minmax(0, 0.5fr)
+      minmax(0, 0.58fr)
+      minmax(0, 0.9fr);
+  }
+
+  .applications-view thead th {
+    min-width: 0;
+    padding: 6px 3px;
+    font-size: 7px;
+    overflow-wrap: anywhere;
+  }
+
+  .applications-view td {
+    min-width: 0;
+    padding: 7px 3px;
+    font-size: 9px;
+    overflow-wrap: anywhere;
+  }
+
+  .applications-view td:nth-child(1) {
+    padding-bottom: 2px;
+  }
+
+  .applications-view td:nth-child(2) {
+    padding-top: 2px;
+  }
+
+  .applications-view .company-cell {
+    font-size: 10px;
+  }
+
+  .applications-view .role-cell {
+    font-size: 8px !important;
+  }
+
+  .applications-view .status-badge {
+    min-height: 20px;
+    max-width: 100%;
+    padding-inline: 4px;
+    font-size: 7px;
+    white-space: normal;
+    text-align: center;
+  }
+
+  .applications-view .table-link {
+    font-size: 8px;
+  }
+
+  .applications-view .row-actions {
+    gap: 2px;
+  }
+
+  .applications-view .row-actions button {
+    min-width: 0;
+    min-height: 28px;
+    padding-inline: 1px;
+    font-size: 7px;
+    white-space: normal;
+  }
+
+  .applications-view .alphabet-index {
+    right: 2px;
+    width: 20px;
+    padding-inline: 1px;
+  }
+
+  .applications-view .alphabet-index button {
+    width: 16px;
+    min-height: 15px;
+    font-size: 7px;
   }
 }

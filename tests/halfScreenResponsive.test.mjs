@@ -6,8 +6,8 @@ const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 
 assert.match(
   css,
-  /@media \(min-width: 521px\) and \(max-width: 820px\)/,
-  'half-screen rules should use an explicit 521px–820px boundary',
+  /\/\* Shared phone and half-screen structure \*\/\s*@media \(max-width: 820px\)/,
+  'phone and half-screen should share the accepted responsive structure',
 );
 assert.match(css, /\.metric-grid\s*\{[^}]*grid-template-columns:\s*repeat\(12,\s*minmax\(0,\s*1fr\)\)/s);
 assert.match(css, /\.metric-card:nth-child\(-n \+ 3\)\s*\{[^}]*grid-column:\s*span 4/s);
@@ -22,6 +22,6 @@ assert.match(css, /\.applications-view tbody\s*\{[^}]*gap:\s*0/s);
 assert.match(css, /\.applications-view tbody tr\s*\{[^}]*border-radius:\s*0/s);
 assert.match(css, /\.applications-view tbody tr:not\(\.group-row\)\s*\{[^}]*grid-template-columns:/s);
 assert.match(css, /\.applications-view \.alphabet-index\s*\{[^}]*right:\s*4px/s);
-assert.match(html, /jobTrackerStyles\.css\?v=20260728-half-screen/);
+assert.match(html, /jobTrackerStyles\.css\?v=20260730-mobile-five-column/);
 
 console.log('half-screen responsive tests passed');
