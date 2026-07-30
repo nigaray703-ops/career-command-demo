@@ -11,3 +11,5 @@ coverage/
 *.docx
 *.env
 *.local
+.worktrees/
+.superpowers/sdd/
