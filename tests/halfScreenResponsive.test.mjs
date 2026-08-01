@@ -22,6 +22,6 @@ assert.match(css, /\.applications-view tbody\s*\{[^}]*gap:\s*0/s);
 assert.match(css, /\.applications-view tbody tr\s*\{[^}]*border-radius:\s*0/s);
 assert.match(css, /\.applications-view tbody tr:not\(\.group-row\)\s*\{[^}]*grid-template-columns:/s);
 assert.match(css, /\.applications-view \.alphabet-index\s*\{[^}]*right:\s*4px/s);
-assert.match(html, /jobTrackerStyles\.css\?v=20260730-mobile-five-column/);
+assert.match(html, /jobTrackerStyles\.css\?v=20260730-mobile-five-column-final-fix/);
 
 console.log('half-screen responsive tests passed');
