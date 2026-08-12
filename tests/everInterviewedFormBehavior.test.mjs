@@ -5,7 +5,6 @@ import { homedir } from 'node:os';
 import { dirname, extname, join, resolve, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-const htmlName = import.meta.url.includes('/demo-github/') ? 'index.html' : 'job-tracker.html';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const runtimeNodeModules = resolve(dirname(process.execPath), '..', 'node_modules');
 const { chromium } = await import(pathToFileURL(join(runtimeNodeModules, 'playwright', 'index.mjs')).href);
@@ -28,32 +27,42 @@ const browserExecutable = (await Promise.all(browserCandidates.map(async (candid
 }))).find(Boolean);
 assert.ok(browserExecutable, 'the bundled Chromium executable must be available for the behavior test');
 
-const server = createServer(async (request, response) => {
-  const pathname = new URL(request.url, 'http://127.0.0.1').pathname;
-  const fileName = pathname === '/' ? htmlName : decodeURIComponent(pathname).replace(/^\/+/, '');
-  const filePath = resolve(root, fileName);
-  if (!filePath.startsWith(`${root}${sep}`) && filePath !== join(root, htmlName)) {
-    response.writeHead(403).end();
-    return;
-  }
-  try {
-    const content = await readFile(filePath);
-    response.writeHead(200, { 'content-type': contentTypes[extname(filePath)] || 'application/octet-stream' }).end(content);
-  } catch {
-    response.writeHead(404).end();
-  }
-});
-
-await new Promise((resolveServer) => server.listen(0, '127.0.0.1', resolveServer));
-const { port } = server.address();
-const origin = `http://127.0.0.1:${port}`;
-const browser = await chromium.launch({ executablePath: browserExecutable, headless: true });
-
+let server;
+let browser;
 try {
+  const htmlName = await selectApplicationHtml();
+  server = createServer(async (request, response) => {
+    const pathname = new URL(request.url, 'http://127.0.0.1').pathname;
+    const fileName = pathname === '/' ? htmlName : decodeURIComponent(pathname).replace(/^\/+/, '');
+    const filePath = resolve(root, fileName);
+    if (!filePath.startsWith(`${root}${sep}`) && filePath !== join(root, htmlName)) {
+      response.writeHead(403).end();
+      return;
+    }
+    try {
+      const content = await readFile(filePath);
+      response.writeHead(200, { 'content-type': contentTypes[extname(filePath)] || 'application/octet-stream' }).end(content);
+    } catch {
+      response.writeHead(404).end();
+    }
+  });
+  await new Promise((resolveServer) => server.listen(0, '127.0.0.1', resolveServer));
+  const { port } = server.address();
+  const origin = `http://127.0.0.1:${port}`;
+  browser = await chromium.launch({ executablePath: browserExecutable, headless: true });
   const page = await browser.newPage();
   const requests = [];
   page.on('request', (request) => requests.push(request.url()));
-  await page.route('**/src/jobTrackerCloud.js', (route) => {
+  await page.route('**/*', (route) => {
+    const requestUrl = route.request().url();
+    if (!requestUrl.startsWith(origin)) {
+      route.abort();
+      return;
+    }
+    if (new URL(requestUrl).pathname !== '/src/jobTrackerCloud.js') {
+      route.continue();
+      return;
+    }
     route.fulfill({
       contentType: 'text/javascript',
       body: `
@@ -69,7 +78,6 @@ try {
     });
   });
   await page.goto(`${origin}/${htmlName}`, { waitUntil: 'networkidle' });
-  assert.ok(requests.every((url) => url.startsWith(origin)), 'the behavior test must not call cloud or auth services');
   await page.locator('[data-view="applications"]').click();
   await page.locator('[data-action="edit"][data-id="fictional-existing-true"]').click();
 
@@ -104,9 +112,30 @@ try {
   const saved = await page.evaluate(() => window.__jobTrackerFormBehaviorSavedRecords.find((record) => record.id === 'fictional-existing-true'));
   assert.equal(saved.status, '面试', 'saving must keep the selected interview-stage status');
   assert.equal(saved.everInterviewed, true, 'saving a disabled forced checkbox must persist true');
+  assert.ok(requests.every((url) => url.startsWith(origin)), 'the behavior test must not call cloud or auth services during any interaction');
 
   console.log('historical interview form behavior tests passed');
 } finally {
-  await browser.close();
-  await new Promise((resolveServer) => server.close(resolveServer));
+  try {
+    if (browser) await browser.close();
+  } finally {
+    if (server?.listening) await new Promise((resolveServer, rejectServer) => server.close((error) => (error ? rejectServer(error) : resolveServer())));
+  }
+}
+
+async function selectApplicationHtml() {
+  const indexHtml = await readHtmlIfPresent('index.html');
+  if (indexHtml?.includes('id="applicationForm"')) return 'index.html';
+  const productionHtml = await readHtmlIfPresent('job-tracker.html');
+  assert.ok(productionHtml, 'missing selected application HTML: expected index.html with #applicationForm or job-tracker.html');
+  assert.match(productionHtml, /id="applicationForm"/, 'selected job-tracker.html must contain the application form');
+  return 'job-tracker.html';
+}
+
+async function readHtmlIfPresent(fileName) {
+  try {
+    return await readFile(join(root, fileName), 'utf8');
+  } catch {
+    return null;
+  }
 }
