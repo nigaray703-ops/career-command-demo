@@ -34,11 +34,11 @@ const phone = extractMediaBlock(
 
 assert.match(
   comfortable,
-  /\.applications-view thead tr\s*\{[^}]*grid-template-columns:\s*minmax\(0,\s*1\.45fr\)\s*minmax\(110px,\s*0\.82fr\)\s*minmax\(90px,\s*0\.72fr\)\s*minmax\(110px,\s*0\.7fr\)[^}]*grid-template-areas:\s*"identity date status candidate"/s,
+  /\.applications-view thead tr\s*\{[^}]*display:\s*grid[^}]*grid-template-columns:\s*minmax\(0,\s*1\.45fr\)\s*minmax\(110px,\s*0\.82fr\)\s*minmax\(90px,\s*0\.72fr\)\s*minmax\(110px,\s*0\.7fr\)[^}]*grid-template-areas:\s*"identity date status candidate"/s,
 );
 assert.match(
   comfortable,
-  /\.applications-view tbody tr:not\(\.group-row\)\s*\{[^}]*grid-template-areas:\s*"company date status candidate"\s*"role actions actions actions"/s,
+  /\.applications-view tbody tr:not\(\.group-row\)\s*\{[^}]*display:\s*grid[^}]*grid-template-areas:\s*"company date status candidate"\s*"role actions actions actions"/s,
 );
 assert.match(
   comfortable,
