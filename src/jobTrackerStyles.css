@@ -2174,6 +2174,10 @@ body.auth-pending .alphabet-index {
 
 /* Comfortable two-line Applications layout */
 @media (min-width: 521px) and (max-width: 1024px) {
+  .workspace:has(.applications-view.active) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
   .applications-view .table-wrap {
     overflow: visible;
     border: 1px solid rgba(37, 99, 235, 0.14);
