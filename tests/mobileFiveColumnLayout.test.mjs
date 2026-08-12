@@ -91,11 +91,11 @@ assert.match(
 );
 assert.match(
   phoneCompactionCss,
-  /\.applications-view \.tool-select select\s*\{[^}]*min-width:\s*0[^}]*width:\s*100%/s,
+  /\.applications-view \.tool-select select\s*\{[^}]*flex:\s*1 1 0[^}]*min-width:\s*0[^}]*width:\s*auto[^}]*max-width:\s*none/s,
   'English phone toolbar selects must shrink inside their grid tracks',
 );
 assert.match(css, /\.sidebar-account\s*\{[^}]*grid-template-columns:\s*minmax\(0,\s*1fr\)/s);
 assert.match(css, /\.applications-view \.alphabet-index\s*\{[^}]*right:\s*2px/s);
-assert.match(html, /jobTrackerStyles\.css\?v=20260813-applications-column-alignment/);
+assert.match(html, /jobTrackerStyles\.css\?v=20260813-responsive-applications-polish/);
 
 console.log('mobile five-column layout tests passed');

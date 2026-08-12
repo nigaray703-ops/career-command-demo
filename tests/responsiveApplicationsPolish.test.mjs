@@ -4,7 +4,7 @@ import { existsSync, readFileSync } from 'node:fs';
 const css = readFileSync(new URL('../src/jobTrackerStyles.css', import.meta.url), 'utf8');
 const indexUrl = new URL('../index.html', import.meta.url);
 const productionUrl = new URL('../job-tracker.html', import.meta.url);
-const html = readFileSync(existsSync(indexUrl) ? indexUrl : productionUrl, 'utf8');
+const html = readFileSync(existsSync(productionUrl) ? productionUrl : indexUrl, 'utf8');
 
 function extractMediaBlock(source, marker) {
   const start = source.indexOf(marker);
@@ -26,6 +26,14 @@ const comfortable = extractMediaBlock(
 const midTopbar = extractMediaBlock(
   css,
   '/* Mid-width topbar containment */\n@media (min-width: 821px) and (max-width: 1200px)',
+);
+const phone = extractMediaBlock(
+  css,
+  '/* Phone five-column compaction */\n@media (max-width: 520px)',
+);
+const narrowPhone = extractMediaBlock(
+  css,
+  '/* Narrow phone toolbar safety */\n@media (max-width: 360px)',
 );
 
 assert.match(
@@ -83,5 +91,36 @@ assert.match(
   /\.topbar-actions\s*\{[^}]*align-self:\s*start[^}]*flex-wrap:\s*nowrap/s,
   'language and add controls must remain a separate stable action group',
 );
+assert.match(
+  phone,
+  /\.applications-view \.toolbar\s*\{[^}]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/s,
+  'the phone toolbar must use two readable columns',
+);
+assert.match(
+  phone,
+  /\.applications-view \.search-field\s*\{[^}]*grid-column:\s*1\s*\/\s*-1/s,
+  'Search must own the complete first phone toolbar row',
+);
+assert.match(
+  phone,
+  /\.applications-view #statusFilter\s*\{[^}]*width:\s*100%[^}]*max-width:\s*none/s,
+  'Status must fill its second-row grid cell',
+);
+assert.match(
+  phone,
+  /\.applications-view \.tool-select select\s*\{[^}]*flex:\s*1 1 0[^}]*width:\s*auto[^}]*max-width:\s*none/s,
+  'selected Direction and Group values must receive remaining control width',
+);
+assert.match(
+  narrowPhone,
+  /\.applications-view \.toolbar\s*\{[^}]*grid-template-columns:\s*minmax\(0,\s*1fr\)/s,
+  'the narrowest phone toolbar must stack into one column',
+);
+assert.match(
+  narrowPhone,
+  /\.applications-view \.search-field\s*\{[^}]*grid-column:\s*1/s,
+  'the single-column fallback must not retain a two-column span',
+);
+assert.match(html, /jobTrackerStyles\.css\?v=20260813-responsive-applications-polish/);
 
 console.log('responsive Applications polish tests passed');

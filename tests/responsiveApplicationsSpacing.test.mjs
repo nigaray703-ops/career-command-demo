@@ -116,6 +116,6 @@ assert.match(
   /\.applications-view thead tr,\s*\.applications-view tbody tr:not\(\.group-row\)\s*\{[^}]*grid-template-columns:\s*minmax\(0,\s*1\.35fr\)\s*minmax\(0,\s*0\.72fr\)\s*minmax\(0,\s*0\.5fr\)\s*minmax\(0,\s*0\.58fr\)\s*minmax\(0,\s*0\.9fr\)/s,
   'The approved phone five-column layout must stay intact',
 );
-assert.match(html, /jobTrackerStyles\.css\?v=20260813-applications-column-alignment/);
+assert.match(html, /jobTrackerStyles\.css\?v=20260813-responsive-applications-polish/);
 
 console.log('responsive Applications spacing tests passed');

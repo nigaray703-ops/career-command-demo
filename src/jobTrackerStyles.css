@@ -2507,8 +2507,17 @@ body.auth-pending .alphabet-index {
   }
 
   .applications-view .toolbar {
-    grid-template-columns: minmax(0, 1.6fr) minmax(0, 0.7fr) minmax(0, 0.7fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 5px;
+  }
+
+  .applications-view .search-field {
+    grid-column: 1 / -1;
+  }
+
+  .applications-view #statusFilter {
+    width: 100%;
+    max-width: none;
   }
 
   .applications-view .tool-select {
@@ -2518,8 +2527,10 @@ body.auth-pending .alphabet-index {
   }
 
   .applications-view .tool-select select {
+    flex: 1 1 0;
     min-width: 0;
-    width: 100%;
+    width: auto;
+    max-width: none;
   }
 
   .applications-view .search-field,
@@ -2604,6 +2615,17 @@ body.auth-pending .alphabet-index {
     width: 16px;
     min-height: 15px;
     font-size: 7px;
+  }
+}
+
+/* Narrow phone toolbar safety */
+@media (max-width: 360px) {
+  .applications-view .toolbar {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .applications-view .search-field {
+    grid-column: 1;
   }
 }
 
