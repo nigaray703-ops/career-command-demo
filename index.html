@@ -11,7 +11,7 @@
     <link rel="icon" type="image/png" href="./assets/favicon-32.png" sizes="32x32" />
     <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png" />
     <link rel="manifest" href="./assets/job-tracker.webmanifest" />
-    <link rel="stylesheet" href="./src/jobTrackerStyles.css?v=20260730-mobile-five-column-final-fix" />
+    <link rel="stylesheet" href="./src/jobTrackerStyles.css?v=20260812-ever-interviewed" />
   </head>
   <body>
     <section class="login-gate" id="loginGate" aria-label="登录求职申请追踪器">
@@ -218,6 +218,13 @@
           <label><span data-i18n="appliedDate">申请日期</span><input name="appliedDate" type="date" /></label>
           <label><span data-i18n="dateNote">日期备注</span><input name="appliedDateNote" placeholder="可选" data-i18n-placeholder="optional" /></label>
           <label><span data-i18n="status">当前状态</span><select name="status" id="statusOptions" required></select></label>
+          <label class="interview-history-field">
+            <span data-i18n="everInterviewed">曾进入面试</span>
+            <span class="interview-history-control">
+              <input name="everInterviewed" id="everInterviewed" type="checkbox" value="true" />
+              <small data-i18n="everInterviewedHint">用于面试率；Offer、已拒和申请中可手动修改</small>
+            </span>
+          </label>
           <label class="wide-field"><span data-i18n="rejectionReason">被拒理由</span><textarea name="rejectionReason" rows="3" placeholder="手动填写被拒原因" data-i18n-placeholder="rejectionReasonPlaceholder"></textarea></label>
           <label class="wide-field"><span data-i18n="notes">备注</span><textarea name="notes" rows="3" placeholder="额外备注" data-i18n-placeholder="notesPlaceholder"></textarea></label>
         </div>
@@ -251,6 +258,6 @@
       </form>
     </dialog>
 
-    <script type="module" src="./src/jobTrackerApp.js?v=20260723-employment-az"></script>
+    <script type="module" src="./src/jobTrackerApp.js?v=20260812-ever-interviewed"></script>
   </body>
 </html>

@@ -9,11 +9,12 @@ import {
   filterApplications,
   getDisplayStatusCount,
   groupApplications,
+  isInterviewStageStatus,
   restoreApplications,
   serializeApplications,
   sortApplications,
   updateApplication,
-} from './jobTrackerLogic.js';
+} from './jobTrackerLogic.js?v=20260812-ever-interviewed';
 import {
   getCloudSession,
   hasSupabaseConfig,
@@ -91,7 +92,9 @@ const i18n = {
     finalHint: '进入最终面试',
     offerHint: '已收到 Offer',
     rejectionRateHint: '已拒申请比例',
-    interviewRateHint: '面试及以上阶段比例',
+    everInterviewed: '曾进入面试',
+    everInterviewedHint: '用于面试率；Offer、已拒和申请中可手动修改',
+    interviewRateHint: '曾进入面试的申请比例',
     listTitle: '申请列表',
     listHint: '搜索公司或岗位，筛选状态，并维护每条申请记录。',
     searchPlaceholder: '搜索公司或岗位',
@@ -206,7 +209,9 @@ const i18n = {
     finalHint: 'Final round',
     offerHint: 'Offer received',
     rejectionRateHint: 'Rejected application share',
-    interviewRateHint: 'Interview or later stage share',
+    everInterviewed: 'Reached interview stage',
+    everInterviewedHint: 'Used for interview rate; editable for Active, Rejected, and Offer',
+    interviewRateHint: 'Share of applications that reached interview stage',
     listTitle: 'Applications',
     listHint: 'Search, filter, sort, group, edit, and delete application records.',
     searchPlaceholder: 'Search company or role',
@@ -328,6 +333,7 @@ const els = {
   dialogMode: document.querySelector('#dialogMode'),
   dialogTitle: document.querySelector('#dialogTitle'),
   statusOptions: document.querySelector('#statusOptions'),
+  everInterviewed: document.querySelector('#everInterviewed'),
   workModeOptions: document.querySelector('#workModeOptions'),
   employmentTypeOptions: document.querySelector('#employmentTypeOptions'),
 };
@@ -416,6 +422,7 @@ function bindEvents() {
     state.filters.status = event.target.value;
     renderApplications();
   });
+  els.statusOptions.addEventListener('change', syncEverInterviewedField);
   els.alphabetIndex?.addEventListener('click', (event) => {
     const button = event.target.closest('[data-initial]');
     if (!button || button.disabled) return;
@@ -722,8 +729,12 @@ function openForm(record = null) {
   els.dialogTitle.textContent = record ? `${record.companyName} · ${record.roleTitle}` : text('newRecord');
   const application = record || createApplication();
   Object.entries(application).forEach(([key, value]) => {
-    if (els.form.elements[key]) els.form.elements[key].value = value;
+    const field = els.form.elements[key];
+    if (!field) return;
+    if (field.type === 'checkbox') field.checked = value === true;
+    else field.value = value;
   });
+  syncEverInterviewedField();
   if (!record) els.form.elements.id.value = '';
   state.formSnapshot = formSnapshot();
   els.dialog.showModal();
@@ -731,12 +742,21 @@ function openForm(record = null) {
 
 function saveForm() {
   const data = Object.fromEntries(new FormData(els.form).entries());
-  const application = createApplication(data);
+  const application = createApplication({
+    ...data,
+    everInterviewed: els.everInterviewed.checked,
+  });
   state.applications = data.id
     ? updateApplication(state.applications, data.id, application)
     : [application, ...state.applications];
   persist();
   render();
+}
+
+function syncEverInterviewedField() {
+  const forced = isInterviewStageStatus(els.statusOptions.value);
+  if (forced) els.everInterviewed.checked = true;
+  els.everInterviewed.disabled = forced;
 }
 
 function shouldCloseFormWithoutPrompt() {
