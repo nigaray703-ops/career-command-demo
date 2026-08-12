@@ -24,7 +24,7 @@ assert.match(
 assert.match(app, /everInterviewed:\s*els\.everInterviewed\.checked/);
 assert.match(css, /\.interview-history-control\s*\{[^}]*display:\s*flex/s);
 assert.match(css, /\.application-form \.interview-history-control input\s*\{[^}]*width:\s*18px/s);
-assert.match(html, /jobTrackerStyles\.css\?v=20260813-responsive-applications-polish/);
+assert.match(html, /jobTrackerStyles\.css\?v=20260813-responsive-applications-final-fix/);
 assert.match(html, /jobTrackerApp\.js\?v=20260812-ever-interviewed-preserve-fields/);
 assert.match(app, /jobTrackerLogic\.js\?v=20260812-ever-interviewed/);
 

@@ -2351,9 +2351,9 @@ body.auth-pending .alphabet-index {
     padding-block: 8px;
   }
 
-  .applications-view td:nth-child(5),
-  .applications-view td:nth-child(6),
-  .applications-view td:nth-child(7) { display: none; }
+  .applications-view tbody tr:not(.group-row) td:nth-child(5),
+  .applications-view tbody tr:not(.group-row) td:nth-child(6),
+  .applications-view tbody tr:not(.group-row) td:nth-child(7) { display: none; }
 
   .applications-view .row-actions {
     width: 100%;
@@ -2668,7 +2668,7 @@ body.auth-pending .alphabet-index {
   }
 
   .applications-view table {
-    min-width: 1000px;
+    min-width: 0;
   }
 
   .applications-view td,
@@ -2679,5 +2679,15 @@ body.auth-pending .alphabet-index {
   .applications-view td:nth-child(n + 3):nth-child(-n + 8),
   .applications-view th:nth-child(n + 3):nth-child(-n + 8) {
     text-align: center;
+  }
+}
+
+@media (min-width: 1025px) and (max-width: 1200px) {
+  .applications-view .row-actions {
+    gap: 2px;
+  }
+
+  .applications-view .row-actions button {
+    padding-inline: 1px;
   }
 }

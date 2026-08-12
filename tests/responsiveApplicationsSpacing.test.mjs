@@ -109,13 +109,14 @@ assert.match(
 );
 assert.match(
   desktop,
-  /\.applications-view table\s*\{[^}]*min-width:\s*1000px/s,
+  /\.applications-view table\s*\{[^}]*min-width:\s*0/s,
+  'The desktop table must release the fixed width floor so all nine columns fit inside the visible wrap',
 );
 assert.match(
   phone,
   /\.applications-view thead tr,\s*\.applications-view tbody tr:not\(\.group-row\)\s*\{[^}]*grid-template-columns:\s*minmax\(0,\s*1\.35fr\)\s*minmax\(0,\s*0\.72fr\)\s*minmax\(0,\s*0\.5fr\)\s*minmax\(0,\s*0\.58fr\)\s*minmax\(0,\s*0\.9fr\)/s,
   'The approved phone five-column layout must stay intact',
 );
-assert.match(html, /jobTrackerStyles\.css\?v=20260813-responsive-applications-polish/);
+assert.match(html, /jobTrackerStyles\.css\?v=20260813-responsive-applications-final-fix/);
 
 console.log('responsive Applications spacing tests passed');
