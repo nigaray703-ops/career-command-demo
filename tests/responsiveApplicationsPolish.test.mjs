@@ -93,6 +93,21 @@ assert.match(
 );
 assert.match(
   phone,
+  /\.applications-view \.alphabet-index\s*\{[^}]*top:\s*auto[^}]*bottom:\s*10px[^}]*max-height:\s*min\(44vh,\s*460px\)[^}]*transform:\s*none/s,
+  'the phone alphabet rail must stay below top actions instead of crossing their vertical space',
+);
+assert.match(
+  midTopbar,
+  /body\.is-lang-en \.applications-view \.compact-select\s*\{[^}]*min-width:\s*164px[^}]*max-width:\s*164px/s,
+  'the English mid-width Direction control must reserve space for its complete selected value',
+);
+assert.match(
+  midTopbar,
+  /body\.is-lang-en \.applications-view #sortDirection\s*\{[^}]*min-width:\s*100px[^}]*max-width:\s*100px/s,
+  'the English mid-width Direction select must include native-arrow space after Ascending',
+);
+assert.match(
+  phone,
   /\.applications-view \.toolbar\s*\{[^}]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/s,
   'the phone toolbar must use two readable columns',
 );

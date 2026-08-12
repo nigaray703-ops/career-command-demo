@@ -2196,6 +2196,16 @@ body.auth-pending .alphabet-index {
     align-self: start;
     flex-wrap: nowrap;
   }
+
+  body.is-lang-en .applications-view .compact-select {
+    min-width: 164px;
+    max-width: 164px;
+  }
+
+  body.is-lang-en .applications-view #sortDirection {
+    min-width: 100px;
+    max-width: 100px;
+  }
 }
 
 /* Comfortable two-line Applications layout */
@@ -2606,6 +2616,10 @@ body.auth-pending .alphabet-index {
   }
 
   .applications-view .alphabet-index {
+    top: auto;
+    bottom: 10px;
+    max-height: min(44vh, 460px);
+    transform: none;
     right: 2px;
     width: 20px;
     padding-inline: 1px;
