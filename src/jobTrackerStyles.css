@@ -2537,8 +2537,8 @@ body.auth-pending .alphabet-index {
 
   .applications-view .panel {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 20px;
-    column-gap: 4px;
+    grid-template-columns: minmax(0, 1fr);
+    column-gap: 0;
     padding: 8px;
   }
 

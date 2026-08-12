@@ -142,8 +142,8 @@ assert.match(
 );
 assert.match(
   phone,
-  /\.applications-view \.panel\s*\{[^}]*display:\s*grid[^}]*grid-template-columns:\s*minmax\(0,\s*1fr\)\s*20px/s,
-  'the phone Applications panel must reserve an in-flow column for the alphabet rail',
+  /\.applications-view \.panel\s*\{[^}]*display:\s*grid[^}]*grid-template-columns:\s*minmax\(0,\s*1fr\)[^}]*column-gap:\s*0/s,
+  'the fixed phone alphabet rail must not consume a second in-flow table column',
 );
 assert.match(
   phone,
