@@ -11,7 +11,7 @@ Evidence collected:
 - All four demo/production comparisons exited `0`: HTML, app, logic, and CSS are byte-identical.
 - Both languages were exercised at `320x844`, `390x844`, `520x950`, `521x950`, `670x950`, `821x950`, and `1200x900`.
 - The rendered loop verified page identity, meaningful content, no framework overlay, separate Dashboard/Applications views, document overflow, table/action reachability, Add/Edit form fit, historical checkbox behavior, cancellation safeguards, translations, accessible names, reload state, and console health.
-- A separate fictional logic check verified legacy normalization, manual Offer true/false, transition preservation, serialize/restore, strict boolean handling, pure-logic backup round trip, and derived statistics. This does not substitute for the blocked rendered import integration gate described below.
+- A separate fictional logic check verified legacy normalization, manual Offer true/false, transition preservation, serialize/restore, strict boolean handling, pure-logic backup round trip, and derived statistics. A rendered export/import round trip independently passed through the real UI and native file chooser.
 - Browser resource inventory and exact local served-file sizes supplied performance evidence without inspecting production traffic.
 
 Maintained suite output:
@@ -74,7 +74,9 @@ Data integrity checks passed:
 
 Rendered export evidence passed through the real UI: clicking `Download data` created `/Users/nigarayaskar/Downloads/career-command-center-backup-2026-08-12.json`, a 3,585-byte JSON file with SHA-256 `f6c7c778cb3872b0235a9bf9feb7c699fcbe00c21443b394d4728e0654c8a6ab`. It contains `app: career-command-center`, version `1`, and the exact five fictional records with historical milestone values `false / true / false / true / false` for Aurora / Summit / Harbour / Nova / Kinetic.
 
-Rendered import integration remains untested. The real `Upload data` button opened the app's actual single-file chooser, but Browser-plugin `setFiles` on that exact exported path stalled without returning or honoring its 5-second timeout; it was interrupted after about 571 seconds. The confirmation, cloud save, rerender, and post-import reload therefore did not execute and must not be inferred from the pure-logic round trip.
+Rendered import integration passed with the exact exported artifact. The real `Upload data` button opened the native macOS chooser; Computer Use entered only the authorized absolute path `/Users/nigarayaskar/Downloads/career-command-center-backup-2026-08-12.json`, selected that file, and clicked Open. The app displayed its real confirmation text, `上传备份会替换当前账号里的申请列表。确定继续吗？`; the authorized confirmation completed and the real import handler rendered `备份已恢复`. The post-import UI showed five records, current counts `申请中 1 / 已拒 1 / 面试 1 / Offer 1`, rejection rate `20%`, and historical interview rate `40%`.
+
+Each restored record was then opened through the visible Edit action. Aurora (`申请中`), Harbour (`已拒`), and Kinetic (`Offer`) retained manual milestone `false` with an enabled checkbox; Nova (`终面`) and Summit (`面试`) retained milestone `true` with a disabled checkbox. After a real page reload, the app rendered `已从云端加载`, the same five records, the same statistics, and the same five milestone/enablement states. Browser warning/error logs remained empty. This completes the rendered download, native chooser, confirmation, save, rerender, and reload round trip without production access or browser-storage inspection.
 
 ### Exact English viewport dimensions — reviewer fix round
 
@@ -146,13 +148,6 @@ None. No data-loss, privacy, security, blank-page, crash, or feature release blo
 - Origin: pre-existing dialog markup; the new checkbox is correctly labeled and does not cause this gap.
 - Disposition: **Defer — does not affect accepted behavior.** Add explicit title association in a focused accessibility change covering all dialogs.
 
-### I-4 — Rendered import integration gate is blocked and unverified
-
-- Evidence: the real fictional export was downloaded and validated, and the real Upload control exposed a single-file chooser. Browser-plugin `setFiles` then stalled before the app could receive the file; confirmation, save, rerender, and reload were never reached.
-- Impact: this audit does not prove the released UI can import its own downloaded backup, even though pure parsing/restore logic tests pass.
-- Origin: Browser-plugin file-input control blocker; no product defect has been reproduced.
-- Disposition: **Fix before release verification.** Temporarily withhold release approval until an authorized alternate file-dialog control can complete the real fictional import path or a product-integrated browser test covers the same handler end to end.
-
 ## Minor findings
 
 ### M-1 — Applications search has no explicit accessible name
@@ -194,10 +189,10 @@ None. No data-loss, privacy, security, blank-page, crash, or feature release blo
 - Inactive `src/jobTrackerDemo.js` remains tracked and unchanged.
 - No old/inactive/untracked file was deleted, moved, staged, or modified.
 - Only fictional demo UI data was viewed. All attempted field changes were discarded, every delete was canceled, and the final reload retained five records.
-- The real fictional Download and Upload controls were invoked. The export succeeded; file assignment stalled before import confirmation/save/rerender, so no import outcome is claimed. No reset flow, browser storage inspection, production authentication, production record, or production storage inspection contributed to the audit.
+- The real fictional Download and Upload controls completed a round trip with the exact exported JSON. Computer Use interacted only with the native chooser and the authorized fictional file path; Browser-plugin evidence verified the rendered success, five restored records, exact statistics/milestones, and persistence after reload. No reset flow, browser storage inspection, production authentication, production record, or production storage inspection contributed to the audit.
 
 ## Release recommendation
 
-Temporarily withhold release approval. The 12 maintained tests pass, all synchronized source pairs are byte-identical, all 14 bilingual responsive cells pass the historical-interview feature gates, and all seven exact English `innerWidth x innerHeight` measurements match their targets. The real fictional export also passed.
+Approve the historical-interview milestone release. The 12 maintained tests pass, all synchronized source pairs are byte-identical, all 14 bilingual responsive cells pass the historical-interview feature gates, all seven exact English `innerWidth x innerHeight` measurements match their targets, and the real fictional rendered export/import round trip passed through download, native chooser, confirmation, save, rerender, and reload.
 
-However, the required rendered import integration remains unverified because Browser-plugin file assignment stalled before confirmation/save/rerender. No Critical or Important product defect caused by Tasks 1–2 was reproduced and no source fix is warranted, but approval must wait for authorized alternate file-dialog control or equivalent end-to-end coverage. Separately track the pre-existing `821px` clipping, responsive header overlap (including the exact `1200px` English reproduction), unnamed dialogs, unnamed searchbox, login-background size, and later modularization.
+No Critical or Important product defect caused by Tasks 1–2 was reproduced, so no product source fix is warranted. Separately track the pre-existing `821px` clipping, responsive header overlap (including the exact `1200px` English reproduction), unnamed dialogs, unnamed searchbox, login-background size, and later modularization.
