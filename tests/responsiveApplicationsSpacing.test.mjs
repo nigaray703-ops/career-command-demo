@@ -4,7 +4,7 @@ import { existsSync, readFileSync } from 'node:fs';
 const css = readFileSync(new URL('../src/jobTrackerStyles.css', import.meta.url), 'utf8');
 const indexUrl = new URL('../index.html', import.meta.url);
 const productionUrl = new URL('../job-tracker.html', import.meta.url);
-const html = readFileSync(existsSync(indexUrl) ? indexUrl : productionUrl, 'utf8');
+const html = readFileSync(existsSync(productionUrl) ? productionUrl : indexUrl, 'utf8');
 
 function extractMediaBlock(source, marker) {
   const start = source.indexOf(marker);

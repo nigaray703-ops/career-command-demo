@@ -2172,6 +2172,81 @@ body.auth-pending .alphabet-index {
   }
 }
 
+/* Comfortable two-line Applications layout */
+@media (min-width: 521px) and (max-width: 1024px) {
+  .applications-view .table-wrap {
+    overflow: visible;
+    border: 1px solid rgba(37, 99, 235, 0.14);
+    border-radius: 12px;
+    background: #ffffff;
+  }
+
+  .applications-view table,
+  .applications-view thead,
+  .applications-view tbody {
+    display: block;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .applications-view thead tr {
+    display: grid;
+    grid-template-columns:
+      minmax(0, 1.45fr)
+      minmax(110px, 0.82fr)
+      minmax(90px, 0.72fr)
+      minmax(110px, 0.7fr);
+    grid-template-areas: "identity date status candidate";
+    width: 100%;
+  }
+
+  .applications-view tbody tr:not(.group-row) {
+    display: grid;
+    grid-template-columns:
+      minmax(0, 1.45fr)
+      minmax(110px, 0.82fr)
+      minmax(90px, 0.72fr)
+      minmax(110px, 0.7fr);
+    grid-template-areas:
+      "company date status candidate"
+      "role actions actions actions";
+    width: 100%;
+  }
+
+  .applications-view thead th:nth-child(1) { grid-area: identity; }
+  .applications-view thead th:nth-child(3) { grid-area: status; }
+  .applications-view thead th:nth-child(4) { grid-area: date; }
+  .applications-view thead th:nth-child(8) { grid-area: candidate; }
+  .applications-view thead th:nth-child(2),
+  .applications-view thead th:nth-child(5),
+  .applications-view thead th:nth-child(6),
+  .applications-view thead th:nth-child(7),
+  .applications-view thead th:nth-child(9) { display: none; }
+
+  .applications-view td:nth-child(1) { grid-area: company; }
+  .applications-view td:nth-child(2) { grid-area: role; }
+  .applications-view td:nth-child(3) { grid-area: status; }
+  .applications-view td:nth-child(4) { grid-area: date; }
+  .applications-view td:nth-child(8) { grid-area: candidate; }
+  .applications-view td:nth-child(9) {
+    grid-area: actions;
+    justify-self: end;
+    width: min(100%, 220px);
+    padding-top: 3px;
+  }
+
+  .applications-view td:nth-child(5),
+  .applications-view td:nth-child(6),
+  .applications-view td:nth-child(7) { display: none; }
+
+  .applications-view .row-actions {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+}
+
 /* Phone five-column compaction */
 @media (max-width: 520px) {
   .sidebar {
@@ -2437,5 +2512,25 @@ body.auth-pending .alphabet-index {
     width: 16px;
     min-height: 15px;
     font-size: 7px;
+  }
+}
+
+/* Desktop Applications spacing */
+@media (min-width: 1025px) {
+  .applications-view.active {
+    padding-right: 30px;
+  }
+
+  .applications-view .panel {
+    padding-inline: 14px;
+  }
+
+  .applications-view table {
+    min-width: 1000px;
+  }
+
+  .applications-view td,
+  .applications-view th {
+    padding-inline: 8px;
   }
 }
