@@ -2338,6 +2338,11 @@ body.auth-pending .alphabet-index {
   .applications-view thead th:nth-child(7),
   .applications-view thead th:nth-child(9) { display: none; }
 
+  body.is-lang-en .applications-view thead th:nth-child(8) {
+    white-space: normal;
+    overflow-wrap: normal;
+  }
+
   .applications-view td:nth-child(1) { grid-area: company; }
   .applications-view td:nth-child(2) { grid-area: role; }
   .applications-view td:nth-child(3) { grid-area: status; }
@@ -2632,6 +2637,7 @@ body.auth-pending .alphabet-index {
   .applications-view .alphabet-index {
     right: 2px;
     width: 20px;
+    max-height: min(40vh, 398px);
     padding-inline: 1px;
   }
 
@@ -2683,11 +2689,24 @@ body.auth-pending .alphabet-index {
 }
 
 @media (min-width: 1025px) and (max-width: 1200px) {
+  .applications-view thead th {
+    padding-inline: 3px;
+    font-size: clamp(9px, calc(0.8vw + 0.8px), 10.4px);
+    line-height: 1.2;
+    white-space: normal;
+    overflow-wrap: normal;
+  }
+
+  .applications-view td:nth-child(9) {
+    padding-inline: 3px;
+  }
+
   .applications-view .row-actions {
     gap: 2px;
   }
 
   .applications-view .row-actions button {
-    padding-inline: 1px;
+    padding-inline: 0;
+    font-size: 10px;
   }
 }

@@ -155,9 +155,40 @@ try {
 
   await page.locator('#appLanguageSelect').selectOption('en');
   await page.waitForFunction(() => document.body.classList.contains('is-lang-en'));
-  for (const width of [1025, 1200]) {
-    await page.setViewportSize({ width, height: 900 });
-    const desktopLayout = await page.evaluate(() => {
+  const comfortableEnglish = await page.evaluate(() => {
+    const wrap = document.querySelector('.applications-view .table-wrap');
+    const candidateHeader = document.querySelector('.applications-view thead th:nth-child(8)');
+    const box = candidateHeader.getBoundingClientRect();
+    const range = document.createRange();
+    range.selectNodeContents(candidateHeader);
+    const textFragments = [...range.getClientRects()]
+      .filter((value) => value.width > 0 && value.height > 0)
+      .map((value) => ({ left: value.left, right: value.right }));
+    return {
+      wrapClientWidth: wrap.clientWidth,
+      wrapScrollWidth: wrap.scrollWidth,
+      candidateBox: { left: box.left, right: box.right },
+      textFragments,
+    };
+  });
+  assert.ok(
+    comfortableEnglish.wrapScrollWidth <= comfortableEnglish.wrapClientWidth,
+    'the 898px English comfortable table must not have internal horizontal overflow',
+  );
+  assert.ok(
+    comfortableEnglish.textFragments.every((fragment) => (
+      fragment.left >= comfortableEnglish.candidateBox.left - 0.5
+      && fragment.right <= comfortableEnglish.candidateBox.right + 0.5
+    )),
+    'the 898px English Candidate Home header text must stay inside its own cell',
+  );
+
+  for (const language of ['zh', 'en']) {
+    await page.locator('#appLanguageSelect').selectOption(language);
+    await page.waitForFunction((value) => document.body.classList.contains(`is-lang-${value}`), language);
+    for (const width of [1025, 1200]) {
+      await page.setViewportSize({ width, height: 900 });
+      const desktopLayout = await page.evaluate(() => {
       const wrap = document.querySelector('.applications-view .table-wrap');
       const table = document.querySelector('.applications-view .table-wrap table');
       const headers = [...table.tHead.rows[0].cells];
@@ -166,6 +197,15 @@ try {
         const value = node.getBoundingClientRect();
         return { left: value.left, right: value.right, width: value.width };
       };
+      const textRects = (node) => {
+        const range = document.createRange();
+        range.selectNodeContents(node);
+        return [...range.getClientRects()]
+          .filter((value) => value.width > 0 && value.height > 0)
+          .map((value) => ({ left: value.left, right: value.right, width: value.width }));
+      };
+      const candidateHomeLink = firstRowCells[7].querySelector('a');
+      const actionButtons = [...firstRowCells[8].querySelectorAll('button')];
       return {
         clientWidth: document.documentElement.clientWidth,
         documentScrollWidth: document.documentElement.scrollWidth,
@@ -174,21 +214,67 @@ try {
         tableScrollWidth: table.scrollWidth,
         wrap: rect(wrap),
         table: rect(table),
-        headers: headers.map(rect),
+        headers: headers.map((header) => ({ box: rect(header), text: textRects(header) })),
         firstRowCells: firstRowCells.map(rect),
+        candidateHomeLink: candidateHomeLink
+          ? { box: rect(candidateHomeLink), text: textRects(candidateHomeLink) }
+          : null,
+        actionButtons: actionButtons.map((button) => ({ box: rect(button), text: textRects(button) })),
         candidateHomeText: headers[7].textContent.trim().toUpperCase(),
         actionsText: headers[8].textContent.trim().toUpperCase(),
       };
     });
-    const isWithinWrap = (box) => box.left >= desktopLayout.wrap.left - 0.5 && box.right <= desktopLayout.wrap.right + 0.5;
-    assert.ok(isWithinWrap(desktopLayout.table), `the ${width}px English table must fit within the visible Applications wrap`);
-    assert.ok(desktopLayout.headers.every(isWithinWrap), `all nine ${width}px English headers must be visible inside the Applications wrap`);
-    assert.ok(desktopLayout.firstRowCells.every(isWithinWrap), `all nine ${width}px first-row cells must be visible inside the Applications wrap`);
-    assert.equal(desktopLayout.candidateHomeText, 'CANDIDATE HOME', `the complete ${width}px Candidate Home header must remain visible`);
-    assert.equal(desktopLayout.actionsText, 'ACTIONS', `the ${width}px Actions header must remain in the initial visible view`);
-    assert.ok(desktopLayout.wrapScrollWidth <= desktopLayout.wrapClientWidth, `the ${width}px Applications wrap must not have internal horizontal overflow`);
-    assert.ok(desktopLayout.tableScrollWidth <= desktopLayout.wrapClientWidth, `the ${width}px nine-column table must not exceed the visible wrap width`);
-    assert.equal(desktopLayout.documentScrollWidth, desktopLayout.clientWidth, `the ${width}px document must not have horizontal overflow`);
+      const label = `${language} ${width}px`;
+      const isWithinWrap = (box) => box.left >= desktopLayout.wrap.left - 0.5 && box.right <= desktopLayout.wrap.right + 0.5;
+      assert.ok(isWithinWrap(desktopLayout.table), `the ${label} table must fit within the visible Applications wrap`);
+      assert.ok(desktopLayout.headers.every(({ box }) => isWithinWrap(box)), `all nine ${label} headers must be visible inside the Applications wrap`);
+      assert.ok(desktopLayout.firstRowCells.every(isWithinWrap), `all nine ${label} first-row cells must be visible inside the Applications wrap`);
+      if (language === 'en') {
+        assert.equal(desktopLayout.candidateHomeText, 'CANDIDATE HOME', `the complete ${width}px Candidate Home header must remain visible`);
+        assert.equal(desktopLayout.actionsText, 'ACTIONS', `the ${width}px Actions header must remain in the initial visible view`);
+      }
+    const isWithin = (inner, outer) => inner.left >= outer.left - 0.5 && inner.right <= outer.right + 0.5;
+    assert.ok(
+      desktopLayout.headers.every(({ box, text }) => text.every((fragment) => isWithin(fragment, box))),
+      `every ${label} header text fragment must stay inside its own header cell`,
+    );
+      assert.ok(desktopLayout.candidateHomeLink, `the ${label} Candidate Home link must exist`);
+    assert.ok(
+      desktopLayout.candidateHomeLink.text.every((fragment) => isWithin(fragment, desktopLayout.candidateHomeLink.box)),
+      `the ${label} Candidate Home link text must stay inside its link box`,
+    );
+      assert.equal(desktopLayout.actionButtons.length, 2, `the ${label} row must expose both action buttons`);
+    assert.ok(
+      desktopLayout.actionButtons.every(({ box }) => isWithin(box, desktopLayout.firstRowCells[8])),
+      `both ${label} action buttons must stay inside the Actions cell`,
+    );
+    assert.ok(
+      desktopLayout.actionButtons.every(({ box, text }) => text.every((fragment) => isWithin(fragment, box))),
+      `both ${label} action labels must stay inside their own buttons`,
+    );
+      assert.ok(desktopLayout.wrapScrollWidth <= desktopLayout.wrapClientWidth, `the ${label} Applications wrap must not have internal horizontal overflow`);
+      assert.ok(desktopLayout.tableScrollWidth <= desktopLayout.wrapClientWidth, `the ${label} nine-column table must not exceed the visible wrap width`);
+      assert.equal(desktopLayout.documentScrollWidth, desktopLayout.clientWidth, `the ${label} document must not have horizontal overflow`);
+    }
+  }
+  await page.setViewportSize({ width: 481, height: 994 });
+  for (const language of ['zh', 'en']) {
+    await page.locator('#appLanguageSelect').selectOption(language);
+    await page.waitForFunction((value) => document.body.classList.contains(`is-lang-${value}`), language);
+    const phoneRail = await page.evaluate(() => {
+      const addButton = document.querySelector('#addApplicationButton').getBoundingClientRect();
+      const rail = document.querySelector('.applications-view .alphabet-index').getBoundingClientRect();
+      return {
+        add: { left: addButton.left, right: addButton.right, top: addButton.top, bottom: addButton.bottom },
+        rail: { left: rail.left, right: rail.right, top: rail.top, bottom: rail.bottom },
+      };
+    });
+    const overlapX = Math.max(0, Math.min(phoneRail.add.right, phoneRail.rail.right) - Math.max(phoneRail.add.left, phoneRail.rail.left));
+    const overlapY = Math.max(0, Math.min(phoneRail.add.bottom, phoneRail.rail.bottom) - Math.max(phoneRail.add.top, phoneRail.rail.top));
+    assert.ok(
+      overlapX === 0 || overlapY === 0,
+      `the ${language} 481px alphabet rail must not overlap Add Application`,
+    );
   }
   assert.ok(requests.every((url) => url.startsWith(origin)), 'the responsive layout test must abort every non-local request');
 

@@ -150,6 +150,6 @@ assert.match(
   /\.applications-view \.search-field\s*\{[^}]*grid-column:\s*1/s,
   'the single-column fallback must not retain a two-column span',
 );
-assert.match(html, /jobTrackerStyles\.css\?v=20260813-responsive-applications-final-fix/);
+assert.match(html, /jobTrackerStyles\.css\?v=20260813-responsive-applications-text-fit/);
 
 console.log('responsive Applications polish tests passed');
