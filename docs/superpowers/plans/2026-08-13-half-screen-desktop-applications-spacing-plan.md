@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Implement the approved B layout so Applications uses a readable two-line record layout from `521px` through `1024px`, then uses a better-spaced nine-column desktop table from `1025px` upward without changing phone layout, data, or behavior.
+**Goal:** Implement the approved B layout so Applications uses a readable two-line record layout from `521px` through `1024px`, then uses a better-spaced nine-column desktop table from `1025px` upward; align every visible information column except Company, Role, and Actions to its header center without changing phone layout, data, or behavior.
 
 **Architecture:** Keep the existing table DOM and JavaScript renderer as the single source of application rows. Add one scoped CSS override for `521px–1024px` after the current shared responsive block, preserve the existing `max-width: 520px` phone compaction as the last narrow-screen layer, and add one scoped desktop spacing layer for `min-width: 1025px`. Mirror only the HTML cache key, CSS, and new static contract test between the fake-data demo and the Vercel production source.
 
@@ -13,6 +13,7 @@
 - `521px–1024px`: use the approved B comfortable two-line Applications layout.
 - `1025px` and wider: preserve all nine desktop columns and improve outer and cell spacing.
 - `520px` and narrower: preserve the current phone five-column layout.
+- At `521px+`, Company and Role remain left-aligned and Actions retain the approved layout. Center the headers and contents for the other visible information columns: Date, Status, and Candidate Home in the comfortable layout; columns 3–8 in the nine-column desktop layout.
 - Do not change the Dashboard, login screen, form, data model, Supabase/cloud code, record saving, filtering, sorting, grouping, A–Z index, edit, delete, import, or export behavior.
 - Chinese and English must use the same DOM and layout rules.
 - Do not read, modify, upload, or publish real application records; browser QA uses only the demo's fictional records.
@@ -323,6 +324,73 @@ git add index.html src/jobTrackerStyles.css tests/responsiveApplicationsSpacing.
 git diff --cached --check
 git commit -m "fix: improve responsive applications spacing"
 ```
+
+---
+
+### Task 2A: Align non-identity information columns to their headers
+
+**Files:**
+- Modify: `tests/responsiveApplicationsSpacing.test.mjs`
+- Modify: `src/jobTrackerStyles.css`
+- Modify mirror: `/Users/nigarayaskar/Documents/求职追踪器/production-current/tests/responsiveApplicationsSpacing.test.mjs`
+- Modify mirror: `/Users/nigarayaskar/Documents/求职追踪器/production-current/src/jobTrackerStyles.css`
+
+**Interfaces:**
+- Consumes: the approved comfortable grid areas `identity date status candidate` and the existing nine desktop columns.
+- Produces: CSS-only horizontal alignment. Company, Role, Actions, phone layout, DOM, JavaScript, and data remain unchanged.
+
+- [ ] **Step 1: Extend the static contract test and capture RED**
+
+Add assertions requiring:
+
+```js
+assert.match(
+  comfortable,
+  /\.applications-view thead th:nth-child\(3\),[\s\S]*\.applications-view td:nth-child\(8\)\s*\{[^}]*text-align:\s*center/s,
+  'Comfortable Date, Status, and Candidate Home headers and cells must be centered',
+);
+assert.match(
+  desktop,
+  /\.applications-view td:nth-child\(n\s*\+\s*3\):nth-child\(-n\s*\+\s*8\),[\s\S]*\.applications-view th:nth-child\(n\s*\+\s*3\):nth-child\(-n\s*\+\s*8\)\s*\{[^}]*text-align:\s*center/s,
+  'Desktop columns 3 through 8 must center headers and contents',
+);
+```
+
+Also assert that the new alignment selectors exist only inside the `521px–1024px` and `1025px+` media blocks; do not weaken the existing phone contract.
+
+Run both demo and production copies with the bundled Node runtime. Expected: both fail because the new alignment contract is missing; syntax or file errors are not acceptable RED evidence.
+
+- [ ] **Step 2: Apply the minimum scoped CSS and reach GREEN**
+
+Inside the comfortable media block, add one grouped rule that centers the visible non-identity headers and cells:
+
+```css
+.applications-view thead th:nth-child(3),
+.applications-view thead th:nth-child(4),
+.applications-view thead th:nth-child(8),
+.applications-view td:nth-child(3),
+.applications-view td:nth-child(4),
+.applications-view td:nth-child(8) {
+  text-align: center;
+}
+```
+
+Inside the desktop media block, add one bounded `nth-child` rule:
+
+```css
+.applications-view td:nth-child(n + 3):nth-child(-n + 8),
+.applications-view th:nth-child(n + 3):nth-child(-n + 8) {
+  text-align: center;
+}
+```
+
+Do not add Company, Role, or Actions to either selector. Do not modify the phone media block. If rendered evidence shows an inline child is not visually centered, add the narrowest child-specific rule only after reproducing it in a failing test.
+
+- [ ] **Step 3: Mirror, verify, and commit**
+
+Use `apply_patch` for both source trees. Run demo and production alignment tests, the complete maintained test list, all four demo/production source `cmp` checks, and `git diff --check`. Then visually verify the center lines in Chinese and English at `521`, `670`, `821`, `1024`, `1025`, `1200`, and `1440` widths; recheck `520` to prove the phone layout is unchanged.
+
+Commit only the intended demo CSS, test, and documentation changes. Preserve all user-owned untracked paths and do not publish until the final QA task passes.
 
 Only include maintained demo files that actually changed. Do not add `.superpowers/brainstorm/`.
 
