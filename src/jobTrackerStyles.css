@@ -2528,11 +2528,30 @@ body.auth-pending .alphabet-index {
   }
 
   .applications-view.active {
-    padding-right: 22px;
+    padding-right: 0;
   }
 
   .applications-view .panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 20px;
+    column-gap: 4px;
     padding: 8px;
+  }
+
+  .applications-view .panel-head {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  .applications-view .table-wrap {
+    grid-column: 1;
+    grid-row: 2;
+    min-width: 0;
+  }
+
+  .applications-view .empty-state {
+    grid-column: 1;
+    grid-row: 3;
   }
 
   .applications-view .toolbar {
@@ -2635,9 +2654,15 @@ body.auth-pending .alphabet-index {
   }
 
   .applications-view .alphabet-index {
-    right: 2px;
+    position: sticky;
+    grid-column: 2;
+    grid-row: 2;
+    align-self: start;
+    top: 8px;
+    bottom: auto;
+    right: auto;
     width: 20px;
-    max-height: min(40vh, 398px);
+    max-height: calc(100svh - 16px);
     padding-inline: 1px;
   }
 

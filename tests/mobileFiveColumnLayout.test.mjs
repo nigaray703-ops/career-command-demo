@@ -95,7 +95,7 @@ assert.match(
   'English phone toolbar selects must shrink inside their grid tracks',
 );
 assert.match(css, /\.sidebar-account\s*\{[^}]*grid-template-columns:\s*minmax\(0,\s*1fr\)/s);
-assert.match(css, /\.applications-view \.alphabet-index\s*\{[^}]*right:\s*2px/s);
-assert.match(html, /jobTrackerStyles\.css\?v=20260813-responsive-applications-text-fit/);
+assert.match(css, /\.applications-view \.alphabet-index\s*\{[^}]*position:\s*sticky[^}]*right:\s*auto/s);
+assert.match(html, /jobTrackerStyles\.css\?v=20260813-mobile-index-icon-stability/);
 
 console.log('mobile five-column layout tests passed');

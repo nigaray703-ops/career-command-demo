@@ -141,6 +141,16 @@ assert.match(
   'selected Direction and Group values must receive remaining control width',
 );
 assert.match(
+  phone,
+  /\.applications-view \.panel\s*\{[^}]*display:\s*grid[^}]*grid-template-columns:\s*minmax\(0,\s*1fr\)\s*20px/s,
+  'the phone Applications panel must reserve an in-flow column for the alphabet rail',
+);
+assert.match(
+  phone,
+  /\.applications-view \.alphabet-index\s*\{[^}]*position:\s*sticky[^}]*grid-column:\s*2[^}]*grid-row:\s*2[^}]*top:\s*8px[^}]*bottom:\s*auto[^}]*right:\s*auto[^}]*max-height:\s*calc\(100svh - 16px\)/s,
+  'the phone alphabet rail must stay anchored to the Applications list instead of the changing viewport bottom',
+);
+assert.match(
   narrowPhone,
   /\.applications-view \.toolbar\s*\{[^}]*grid-template-columns:\s*minmax\(0,\s*1fr\)/s,
   'the narrowest phone toolbar must stack into one column',
@@ -150,6 +160,7 @@ assert.match(
   /\.applications-view \.search-field\s*\{[^}]*grid-column:\s*1/s,
   'the single-column fallback must not retain a two-column span',
 );
-assert.match(html, /jobTrackerStyles\.css\?v=20260813-responsive-applications-text-fit/);
+assert.match(html, /rel="apple-touch-icon" href="\.\/assets\/job-tracker-icon-192\.png\?v=20260813-mobile-index-icon-stability"/);
+assert.match(html, /jobTrackerStyles\.css\?v=20260813-mobile-index-icon-stability/);
 
 console.log('responsive Applications polish tests passed');

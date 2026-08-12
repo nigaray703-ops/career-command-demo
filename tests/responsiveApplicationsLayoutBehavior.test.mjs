@@ -116,6 +116,41 @@ try {
   });
 
   await page.goto(`${origin}/${htmlName}`, { waitUntil: 'networkidle' });
+  const touchIcon = await page.evaluate(async () => {
+    const link = document.querySelector('link[rel="apple-touch-icon"]');
+    if (!link) return null;
+    const image = new Image();
+    const loaded = new Promise((resolveImage) => {
+      image.addEventListener('load', () => resolveImage(true), { once: true });
+      image.addEventListener('error', () => resolveImage(false), { once: true });
+    });
+    image.src = link.href;
+    const didLoad = await loaded;
+    return {
+      href: link.href,
+      didLoad,
+      naturalWidth: image.naturalWidth,
+      naturalHeight: image.naturalHeight,
+    };
+  });
+  assert.ok(touchIcon, 'the page must expose an Apple touch icon');
+  const legacyTouchIconResponse = await page.request.get(`${origin}/assets/apple-touch-icon.png`);
+  assert.equal(
+    legacyTouchIconResponse.status(),
+    404,
+    'the unrelated legacy mobile icon must not remain publicly served',
+  );
+  assert.match(
+    touchIcon.href,
+    /\/assets\/job-tracker-icon-192\.png\?v=20260813-mobile-index-icon-stability$/,
+    'mobile home-screen installs must use the Career Command Center icon',
+  );
+  assert.equal(touchIcon.didLoad, true, 'the Career Command Center Apple touch icon must load');
+  assert.deepEqual(
+    [touchIcon.naturalWidth, touchIcon.naturalHeight],
+    [192, 192],
+    'the linked Career Command Center icon must expose its complete square artwork',
+  );
   await page.locator('[data-view="applications"]').click();
   await page.locator('#applicationRows tr:not(.group-row)').first().waitFor();
 
@@ -257,16 +292,21 @@ try {
       assert.equal(desktopLayout.documentScrollWidth, desktopLayout.clientWidth, `the ${label} document must not have horizontal overflow`);
     }
   }
-  await page.setViewportSize({ width: 481, height: 994 });
   for (const language of ['zh', 'en']) {
+    await page.setViewportSize({ width: 481, height: 994 });
     await page.locator('#appLanguageSelect').selectOption(language);
     await page.waitForFunction((value) => document.body.classList.contains(`is-lang-${value}`), language);
     const phoneRail = await page.evaluate(() => {
       const addButton = document.querySelector('#addApplicationButton').getBoundingClientRect();
       const rail = document.querySelector('.applications-view .alphabet-index').getBoundingClientRect();
+      const table = document.querySelector('.applications-view .table-wrap').getBoundingClientRect();
+      const panel = document.querySelector('.applications-view .panel').getBoundingClientRect();
       return {
         add: { left: addButton.left, right: addButton.right, top: addButton.top, bottom: addButton.bottom },
         rail: { left: rail.left, right: rail.right, top: rail.top, bottom: rail.bottom },
+        table: { left: table.left, right: table.right, top: table.top, bottom: table.bottom },
+        panel: { left: panel.left, right: panel.right, top: panel.top, bottom: panel.bottom },
+        position: getComputedStyle(document.querySelector('.applications-view .alphabet-index')).position,
       };
     });
     const overlapX = Math.max(0, Math.min(phoneRail.add.right, phoneRail.rail.right) - Math.max(phoneRail.add.left, phoneRail.rail.left));
@@ -274,6 +314,21 @@ try {
     assert.ok(
       overlapX === 0 || overlapY === 0,
       `the ${language} 481px alphabet rail must not overlap Add Application`,
+    );
+    assert.equal(phoneRail.position, 'sticky', `the ${language} 481px alphabet rail must use in-flow sticky positioning`);
+    assert.ok(phoneRail.rail.left >= phoneRail.table.right - 0.5, `the ${language} 481px alphabet rail must not cover the table`);
+    assert.ok(phoneRail.rail.right <= phoneRail.panel.right + 0.5, `the ${language} 481px alphabet rail must remain inside the Applications panel`);
+
+    await page.setViewportSize({ width: 481, height: 744 });
+    const shortRail = await page.evaluate(() => ({
+      railTop: document.querySelector('.applications-view .alphabet-index').getBoundingClientRect().top,
+      tableTop: document.querySelector('.applications-view .table-wrap').getBoundingClientRect().top,
+    }));
+    const tallRailOffset = phoneRail.rail.top - phoneRail.table.top;
+    const shortRailOffset = shortRail.railTop - shortRail.tableTop;
+    assert.ok(
+      Math.abs(shortRailOffset - tallRailOffset) <= 1,
+      `the ${language} phone alphabet rail must keep the same table-relative position when the mobile browser height changes`,
     );
   }
   assert.ok(requests.every((url) => url.startsWith(origin)), 'the responsive layout test must abort every non-local request');
