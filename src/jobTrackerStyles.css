@@ -2215,6 +2215,36 @@ body.auth-pending .alphabet-index {
       "company date status candidate"
       "role actions actions actions";
     width: 100%;
+    grid-template-rows: minmax(48px, auto) minmax(48px, auto);
+    align-items: stretch;
+    border: 0;
+    border-bottom: 1px solid rgba(37, 99, 235, 0.14);
+    border-radius: 0;
+    box-shadow: none;
+    overflow: visible;
+  }
+
+  .applications-view tbody tr:not(.group-row):last-child {
+    border-bottom: 0;
+  }
+
+  .applications-view tbody tr:not(.group-row) td {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    border-bottom: 0;
+  }
+
+  .applications-view tbody tr:not(.group-row) td:nth-child(3),
+  .applications-view tbody tr:not(.group-row) td:nth-child(4),
+  .applications-view tbody tr:not(.group-row) td:nth-child(8) {
+    justify-content: center;
+  }
+
+  .applications-view td:nth-child(2),
+  .applications-view td:nth-child(9) {
+    min-height: 48px;
+    padding-block: 8px;
   }
 
   .applications-view tbody tr.group-row,
@@ -2267,7 +2297,8 @@ body.auth-pending .alphabet-index {
     grid-area: actions;
     justify-self: end;
     width: min(100%, 220px);
-    padding-top: 3px;
+    align-self: stretch;
+    padding-block: 8px;
   }
 
   .applications-view td:nth-child(5),
