@@ -66,7 +66,16 @@ try {
     route.fulfill({
       contentType: 'text/javascript',
       body: `
-        const record = { id: 'fictional-existing-true', companyName: 'Fictional Workflow Co', roleTitle: 'Fictional Operations Role', status: '申请中', everInterviewed: true };
+        const record = {
+          id: 'fictional-existing-true',
+          companyName: 'Fictional Workflow Co',
+          roleTitle: 'Fictional Operations Role',
+          roleCategory: 'Business Analysis',
+          industry: 'Finance',
+          status: '申请中',
+          everInterviewed: true,
+          priority: '高',
+        };
         export function hasSupabaseConfig() { return true; }
         export async function getCloudSession() { return { user: { id: 'form-behavior-test', email: 'form-behavior-test@example.invalid', user_metadata: { full_name: 'Form Behavior Test' } } }; }
         export async function onCloudAuthChange() { return null; }
@@ -112,6 +121,9 @@ try {
   const saved = await page.evaluate(() => window.__jobTrackerFormBehaviorSavedRecords.find((record) => record.id === 'fictional-existing-true'));
   assert.equal(saved.status, '面试', 'saving must keep the selected interview-stage status');
   assert.equal(saved.everInterviewed, true, 'saving a disabled forced checkbox must persist true');
+  assert.equal(saved.roleCategory, 'Business Analysis', 'saving form-only edits must preserve the hidden role category');
+  assert.equal(saved.industry, 'Finance', 'saving form-only edits must preserve the hidden industry');
+  assert.equal(saved.priority, '高', 'saving form-only edits must preserve the hidden priority');
   assert.ok(requests.every((url) => url.startsWith(origin)), 'the behavior test must not call cloud or auth services during any interaction');
 
   console.log('historical interview form behavior tests passed');

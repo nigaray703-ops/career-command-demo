@@ -742,13 +742,13 @@ function openForm(record = null) {
 
 function saveForm() {
   const data = Object.fromEntries(new FormData(els.form).entries());
-  const application = createApplication({
+  const patch = {
     ...data,
     everInterviewed: els.everInterviewed.checked,
-  });
+  };
   state.applications = data.id
-    ? updateApplication(state.applications, data.id, application)
-    : [application, ...state.applications];
+    ? updateApplication(state.applications, data.id, patch)
+    : [createApplication(patch), ...state.applications];
   persist();
   render();
 }
