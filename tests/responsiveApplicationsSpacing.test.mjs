@@ -66,6 +66,31 @@ assert.match(
 );
 assert.match(
   desktop,
+  /\.applications-view td:nth-child\(n\s*\+\s*3\):nth-child\(-n\s*\+\s*8\),[\s\S]*\.applications-view th:nth-child\(n\s*\+\s*3\):nth-child\(-n\s*\+\s*8\)\s*\{[^}]*text-align:\s*center/s,
+  'Desktop columns 3 through 8 must center headers and contents',
+);
+assert.match(
+  comfortable,
+  /\.applications-view thead th:nth-child\(3\),[\s\S]*\.applications-view td:nth-child\(8\)\s*\{[^}]*text-align:\s*center/s,
+  'Comfortable Date, Status, and Candidate Home headers and cells must be centered',
+);
+assert.doesNotMatch(
+  phone,
+  /\.applications-view thead th:nth-child\(3\),[\s\S]*\.applications-view td:nth-child\(8\)\s*\{[^}]*text-align:\s*center/s,
+  'The comfortable alignment rule must not leak into phone compaction',
+);
+assert.doesNotMatch(
+  phone,
+  /\.applications-view td:nth-child\(n\s*\+\s*3\):nth-child\(-n\s*\+\s*8\),[\s\S]*\.applications-view th:nth-child\(n\s*\+\s*3\):nth-child\(-n\s*\+\s*8\)\s*\{[^}]*text-align:\s*center/s,
+  'The desktop alignment rule must not leak into phone compaction',
+);
+assert.match(
+  desktop,
+  /\.workspace:has\(\.applications-view\.active\)\s*\{[^}]*grid-template-columns:\s*minmax\(0,\s*1fr\)/s,
+  'The desktop boundary must contain the active Applications workspace grid track',
+);
+assert.match(
+  desktop,
   /\.applications-view\.active\s*\{[^}]*padding-right:\s*30px/s,
 );
 assert.match(
