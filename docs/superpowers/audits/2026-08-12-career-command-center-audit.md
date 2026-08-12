@@ -11,7 +11,7 @@ Evidence collected:
 - All four demo/production comparisons exited `0`: HTML, app, logic, and CSS are byte-identical.
 - Both languages were exercised at `320x844`, `390x844`, `520x950`, `521x950`, `670x950`, `821x950`, and `1200x900`.
 - The rendered loop verified page identity, meaningful content, no framework overlay, separate Dashboard/Applications views, document overflow, table/action reachability, Add/Edit form fit, historical checkbox behavior, cancellation safeguards, translations, accessible names, reload state, and console health.
-- A separate fictional logic check verified legacy normalization, manual Offer true/false, transition preservation, serialize/restore, strict boolean handling, backup round trip, and derived statistics.
+- A separate fictional logic check verified legacy normalization, manual Offer true/false, transition preservation, serialize/restore, strict boolean handling, pure-logic backup round trip, and derived statistics. This does not substitute for the blocked rendered import integration gate described below.
 - Browser resource inventory and exact local served-file sizes supplied performance evidence without inspecting production traffic.
 
 Maintained suite output:
@@ -56,8 +56,8 @@ All 14 language-width cells passed the historical-interview feature and reversib
 | en | `670x950` | none, `670/670` | pass | fits | pass | `5 -> 5` | 0 |
 | zh | `821x950` | no document overflow | nine-column table is reachable through its local `overflow-x:auto` scroll; Edit/Delete succeeded | fits | pass | `5 -> 5` | 0 |
 | en | `821x950` | no document overflow | same local-scroll reachability; Edit/Delete succeeded | fits | pass | `5 -> 5` | 0 |
-| zh | `1200x900` | none, `1200/1200` | nine cells and actions visible | fits, `860/860` | pass | `5 -> 5` | 0 |
-| en | `1200x900` | none, `1200/1200` | nine cells and actions visible | fits, `860/860` | pass | `5 -> 5` | 0 |
+| zh | `1200x900` | none, `1200/1200` | nine columns; rightmost actions reachable through local table scroll | fits, `860/860` | pass | `5 -> 5` | 0 |
+| en | `1200x900` | none, `1200/1200` | nine columns; rightmost actions reachable through local table scroll | fits, `860/860` | pass | `5 -> 5` | 0 |
 
 At every width, Dashboard and Applications were mutually exclusive, Candidate Home links retained `target="_blank" rel="noreferrer"`, and current Interview and Offer cards remained distinct. The checkbox label/helper remained present in both languages. Tab from Status focused the checkbox; Interview/Final forced it checked and disabled, while Active/Rejected/Offer made it editable. Add cancel, edited-form Escape/discard, and Delete cancel preserved all five fictional records.
 
@@ -71,6 +71,36 @@ Data integrity checks passed:
 - String `"true"` is not coerced to boolean true.
 - Serialize/restore and backup restore round trips preserve status and milestone.
 - A three-record fictional calculation produced current Interview `0`, historical milestones `2`, Offer `2`, and Interview Rate `66.7%`.
+
+Rendered export evidence passed through the real UI: clicking `Download data` created `/Users/nigarayaskar/Downloads/career-command-center-backup-2026-08-12.json`, a 3,585-byte JSON file with SHA-256 `f6c7c778cb3872b0235a9bf9feb7c699fcbe00c21443b394d4728e0654c8a6ab`. It contains `app: career-command-center`, version `1`, and the exact five fictional records with historical milestone values `false / true / false / true / false` for Aurora / Summit / Harbour / Nova / Kinetic.
+
+Rendered import integration remains untested. The real `Upload data` button opened the app's actual single-file chooser, but Browser-plugin `setFiles` on that exact exported path stalled without returning or honoring its 5-second timeout; it was interrupted after about 571 seconds. The confirmation, cloud save, rerender, and post-import reload therefore did not execute and must not be inferred from the pure-logic round trip.
+
+### Exact English viewport dimensions — reviewer fix round
+
+All seven English cells were rerun after setting the explicit Browser viewport. `window.innerWidth x innerHeight` matched the requested size in every cell. `documentElement.clientWidth x clientHeight` also matched in this run because the selected Chrome surface used overlay scrollbars; the vertical and horizontal window/client deltas were both `0` throughout.
+
+| Requested viewport | `window.innerWidth x innerHeight` | `documentElement.clientWidth x clientHeight` | Window/client delta `(w,h)` | Document overflow / key bounds |
+| --- | --- | --- | --- | --- |
+| `320x844` | `320x844` | `320x844` | `0,0` | no overflow; Application action cell `x=220.7..278`; Dashboard cards `x=10..310` |
+| `390x844` | `390x844` | `390x844` | `0,0` | no overflow; action cell `x=275.1..348`; cards `x=10..380` |
+| `520x950` | `520x950` | `520x950` | `0,0` | no overflow; action cell `x=376.2..478`; cards `x=10..510` |
+| `521x950` | `521x950` | `521x950` | `0,0` | no overflow; action cell `x=366.1..463`; cards `x=16..505` |
+| `670x950` | `670x950` | `670x950` | `0,0` | no overflow; action cell `x=481.7..612`; cards `x=16..654` |
+| `821x950` | `821x950` | `821x950` | `0,0` | document `821/821`; desktop table `802/1040`, `overflow-x:auto`; unscrolled action cell `x=1188.2..1313`; Dashboard cards extend `x=256..1126.2`, confirming pre-existing clipping |
+| `1200x900` | `1200x900` | `1200x900` | `0,0` | document `1200/1200`; table `860/1040`, `overflow-x:auto`; unscrolled action cell `x=1188.2..1313` and is reachable via local scroll; cards `x=256..1184` |
+
+Every rerun returned zero console warnings/errors. In particular, the 520 and 521 `innerWidth` values were exact and demonstrate the intended two sides of the breakpoint; the earlier `505/506`-style numbers were client widths after a non-overlay scrollbar allocation, not mismatched `innerWidth` values.
+
+### External screenshot evidence identifiers
+
+The images remain outside the repository and are session evidence only; no image is staged. The Browser backend encoded JPEG bytes despite the historical `.png` filename suffix.
+
+| Evidence | Absolute path | Native dimensions | Bytes | SHA-256 |
+| --- | --- | --- | --- | --- |
+| English narrow topbar | `/private/tmp/career-command-center-audit-en-320.png` | `320x844` | `39,433` | `02e50d46f3c83b78588bec940b96bce3d13e6245a3ad4914d7f582158e2d79f4` |
+| English first desktop pixel | `/private/tmp/career-command-center-audit-en-821.png` | `821x950` | `59,131` | `70aae1ac7a3a810ba17c5192ae9968f0b2113fa54b8cd38effe0415cfb1b3374` |
+| English 1200px tagline | `/private/tmp/career-command-center-audit-en-1200.png` | `1200x900` | `79,573` | `e68aa862f407d966686c46afae71137c6510b365a13388aad45f7f2cd51ce4b1` |
 
 Accessibility checks passed for the historical control itself: bilingual visible label, keyboard focus, checked/disabled semantics, helper text included in the accessible name, translated control/region names, named buttons, and color-independent status text. Pre-existing gaps are listed below.
 
@@ -116,6 +146,13 @@ None. No data-loss, privacy, security, blank-page, crash, or feature release blo
 - Origin: pre-existing dialog markup; the new checkbox is correctly labeled and does not cause this gap.
 - Disposition: **Defer — does not affect accepted behavior.** Add explicit title association in a focused accessibility change covering all dialogs.
 
+### I-4 — Rendered import integration gate is blocked and unverified
+
+- Evidence: the real fictional export was downloaded and validated, and the real Upload control exposed a single-file chooser. Browser-plugin `setFiles` then stalled before the app could receive the file; confirmation, save, rerender, and reload were never reached.
+- Impact: this audit does not prove the released UI can import its own downloaded backup, even though pure parsing/restore logic tests pass.
+- Origin: Browser-plugin file-input control blocker; no product defect has been reproduced.
+- Disposition: **Fix before release verification.** Temporarily withhold release approval until an authorized alternate file-dialog control can complete the real fictional import path or a product-integrated browser test covers the same handler end to end.
+
 ## Minor findings
 
 ### M-1 — Applications search has no explicit accessible name
@@ -157,10 +194,10 @@ None. No data-loss, privacy, security, blank-page, crash, or feature release blo
 - Inactive `src/jobTrackerDemo.js` remains tracked and unchanged.
 - No old/inactive/untracked file was deleted, moved, staged, or modified.
 - Only fictional demo UI data was viewed. All attempted field changes were discarded, every delete was canceled, and the final reload retained five records.
-- No Upload Data, file chooser, import/reset flow, browser storage inspection, production authentication, production record, or production storage inspection contributed to the audit.
+- The real fictional Download and Upload controls were invoked. The export succeeded; file assignment stalled before import confirmation/save/rerender, so no import outcome is claimed. No reset flow, browser storage inspection, production authentication, production record, or production storage inspection contributed to the audit.
 
 ## Release recommendation
 
-Approve the historical-interview milestone release. The 12 maintained tests pass, all synchronized source pairs are byte-identical, and all 14 bilingual responsive cells pass the feature, persistence-safety, overflow, reachability, form, translation, and console gates.
+Temporarily withhold release approval. The 12 maintained tests pass, all synchronized source pairs are byte-identical, all 14 bilingual responsive cells pass the historical-interview feature gates, and all seven exact English `innerWidth x innerHeight` measurements match their targets. The real fictional export also passed.
 
-No Critical or Important defect caused by Tasks 1–2 was reproduced, so no source fix is warranted. Commit only this audit report. Track the pre-existing `821px` clipping, responsive header overlap (including the required `1200px` English reproduction), unnamed dialogs, unnamed searchbox, login-background size, and later modularization as separate follow-up work.
+However, the required rendered import integration remains unverified because Browser-plugin file assignment stalled before confirmation/save/rerender. No Critical or Important product defect caused by Tasks 1–2 was reproduced and no source fix is warranted, but approval must wait for authorized alternate file-dialog control or equivalent end-to-end coverage. Separately track the pre-existing `821px` clipping, responsive header overlap (including the exact `1200px` English reproduction), unnamed dialogs, unnamed searchbox, login-background size, and later modularization.
