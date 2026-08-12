@@ -27,6 +27,10 @@ const midTopbar = extractMediaBlock(
   css,
   '/* Mid-width topbar containment */\n@media (min-width: 821px) and (max-width: 1200px)',
 );
+const sharedResponsive = extractMediaBlock(
+  css,
+  '/* Shared phone and half-screen structure */\n@media (max-width: 820px)',
+);
 const phone = extractMediaBlock(
   css,
   '/* Phone five-column compaction */\n@media (max-width: 520px)',
@@ -92,9 +96,9 @@ assert.match(
   'language and add controls must remain a separate stable action group',
 );
 assert.match(
-  phone,
+  sharedResponsive,
   /\.applications-view \.alphabet-index\s*\{[^}]*top:\s*auto[^}]*bottom:\s*10px[^}]*max-height:\s*min\(44vh,\s*460px\)[^}]*transform:\s*none/s,
-  'the phone alphabet rail must stay below top actions instead of crossing their vertical space',
+  'the phone and half-screen alphabet rail must stay below top actions instead of crossing their vertical space',
 );
 assert.match(
   midTopbar,

@@ -2168,6 +2168,10 @@ body.auth-pending .alphabet-index {
   }
 
   .applications-view .alphabet-index {
+    top: auto;
+    bottom: 10px;
+    max-height: min(44vh, 460px);
+    transform: none;
     right: 4px;
   }
 }
@@ -2616,10 +2620,6 @@ body.auth-pending .alphabet-index {
   }
 
   .applications-view .alphabet-index {
-    top: auto;
-    bottom: 10px;
-    max-height: min(44vh, 460px);
-    transform: none;
     right: 2px;
     width: 20px;
     padding-inline: 1px;
