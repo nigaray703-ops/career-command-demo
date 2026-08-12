@@ -11,11 +11,17 @@ export const WORK_MODES = ['待确认', '远程办公', '混合办公', '现场�
 export const EMPLOYMENT_TYPES = ['待确认', '全职', '兼职', '固定期限', '合同工', '临时工', '实习', '自由职业'];
 const LEGACY_WORK_MODES = ['远程', '远程/新西兰'];
 const LEGACY_EMPLOYMENT_TYPES = { 自由岗: '自由职业' };
+const INTERVIEW_STAGE_STATUSES = new Set(['面试', '终面']);
 export const PRIORITIES = ['高', '中', '低'];
 export const seedApplications = [];
 
+export function isInterviewStageStatus(status) {
+  return INTERVIEW_STAGE_STATUSES.has(status);
+}
+
 export function createApplication(input = {}) {
   const now = new Date().toISOString();
+  const status = normalizeStatus(input.status);
   return {
     id: input.id || cryptoId(),
     companyName: input.companyName || '',
@@ -29,7 +35,8 @@ export function createApplication(input = {}) {
     applicationUrl: input.applicationUrl || '',
     appliedDate: input.appliedDate || '',
     appliedDateNote: input.appliedDateNote || '',
-    status: normalizeStatus(input.status),
+    status,
+    everInterviewed: isInterviewStageStatus(status) || input.everInterviewed === true,
     priority: PRIORITIES.includes(input.priority) ? input.priority : '中',
     rejectionReason: input.rejectionReason || '',
     notes: input.notes || '',
@@ -103,7 +110,11 @@ export function calculateDashboardStats(records) {
   });
 
   const total = records.length;
-  const interviewCount = ['面试', '终面', 'Offer'].reduce((sum, status) => sum + (statusCounts[status] || 0), 0);
+  const interviewCount = statusCounts['面试'] || 0;
+  const everInterviewedCount = records.reduce(
+    (sum, record) => sum + (record.everInterviewed === true ? 1 : 0),
+    0,
+  );
   const rejected = statusCounts['已拒'] || 0;
 
   return {
@@ -112,10 +123,11 @@ export function calculateDashboardStats(records) {
     applied: statusCounts['申请中'] || 0,
     rejected,
     interviewCount,
+    everInterviewedCount,
     offer: statusCounts.Offer || 0,
     noResponse: 0,
     rejectionRate: total ? roundRate((rejected / total) * 100) : 0,
-    interviewRate: total ? roundRate((interviewCount / total) * 100) : 0,
+    interviewRate: total ? roundRate((everInterviewedCount / total) * 100) : 0,
   };
 }
 
