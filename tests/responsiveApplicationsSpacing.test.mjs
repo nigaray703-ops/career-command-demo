@@ -42,6 +42,16 @@ assert.match(
 );
 assert.match(
   comfortable,
+  /\.applications-view tbody tr\.group-row,\s*\.applications-view tbody tr\.group-row td\s*\{[^}]*display:\s*block[^}]*width:\s*100%/s,
+  'Grouped sections must remain full-width when tbody becomes block-level',
+);
+assert.match(
+  comfortable,
+  /\.applications-view thead th:nth-child\(1\),\s*\.applications-view thead th:nth-child\(3\),\s*\.applications-view thead th:nth-child\(4\),\s*\.applications-view thead th:nth-child\(8\),\s*\.applications-view td:nth-child\(1\),\s*\.applications-view td:nth-child\(2\),\s*\.applications-view td:nth-child\(3\),\s*\.applications-view td:nth-child\(4\),\s*\.applications-view td:nth-child\(8\)\s*\{[^}]*width:\s*auto/s,
+  'Visible comfortable-layout cells must override the global percentage widths',
+);
+assert.match(
+  comfortable,
   /\.applications-view thead th:nth-child\(9\)\s*\{[^}]*display:\s*none/s,
   'Actions must leave the narrow header row and move to the record second line',
 );

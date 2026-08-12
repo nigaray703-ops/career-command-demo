@@ -2213,6 +2213,24 @@ body.auth-pending .alphabet-index {
     width: 100%;
   }
 
+  .applications-view tbody tr.group-row,
+  .applications-view tbody tr.group-row td {
+    display: block;
+    width: 100%;
+  }
+
+  .applications-view thead th:nth-child(1),
+  .applications-view thead th:nth-child(3),
+  .applications-view thead th:nth-child(4),
+  .applications-view thead th:nth-child(8),
+  .applications-view td:nth-child(1),
+  .applications-view td:nth-child(2),
+  .applications-view td:nth-child(3),
+  .applications-view td:nth-child(4),
+  .applications-view td:nth-child(8) {
+    width: auto;
+  }
+
   .applications-view thead th:nth-child(1) { grid-area: identity; }
   .applications-view thead th:nth-child(3) { grid-area: status; }
   .applications-view thead th:nth-child(4) { grid-area: date; }
