@@ -2531,6 +2531,10 @@ body.auth-pending .alphabet-index {
     padding-right: 0;
   }
 
+  .workspace:has(.applications-view.active) {
+    padding-right: 34px;
+  }
+
   .applications-view .panel {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 20px;
@@ -2654,13 +2658,11 @@ body.auth-pending .alphabet-index {
   }
 
   .applications-view .alphabet-index {
-    position: sticky;
-    grid-column: 2;
-    grid-row: 2;
-    align-self: start;
-    top: 8px;
+    position: fixed;
+    top: 50%;
     bottom: auto;
-    right: auto;
+    right: 4px;
+    transform: translateY(-50%);
     width: 20px;
     max-height: calc(100svh - 16px);
     padding-inline: 1px;

@@ -296,16 +296,19 @@ try {
     await page.setViewportSize({ width: 481, height: 994 });
     await page.locator('#appLanguageSelect').selectOption(language);
     await page.waitForFunction((value) => document.body.classList.contains(`is-lang-${value}`), language);
+    await page.evaluate(() => {
+      document.body.style.minHeight = '2200px';
+      window.scrollTo(0, 0);
+    });
     const phoneRail = await page.evaluate(() => {
       const addButton = document.querySelector('#addApplicationButton').getBoundingClientRect();
       const rail = document.querySelector('.applications-view .alphabet-index').getBoundingClientRect();
       const table = document.querySelector('.applications-view .table-wrap').getBoundingClientRect();
-      const panel = document.querySelector('.applications-view .panel').getBoundingClientRect();
       return {
+        viewportWidth: innerWidth,
         add: { left: addButton.left, right: addButton.right, top: addButton.top, bottom: addButton.bottom },
         rail: { left: rail.left, right: rail.right, top: rail.top, bottom: rail.bottom },
         table: { left: table.left, right: table.right, top: table.top, bottom: table.bottom },
-        panel: { left: panel.left, right: panel.right, top: panel.top, bottom: panel.bottom },
         position: getComputedStyle(document.querySelector('.applications-view .alphabet-index')).position,
       };
     });
@@ -313,23 +316,36 @@ try {
     const overlapY = Math.max(0, Math.min(phoneRail.add.bottom, phoneRail.rail.bottom) - Math.max(phoneRail.add.top, phoneRail.rail.top));
     assert.ok(
       overlapX === 0 || overlapY === 0,
-      `the ${language} 481px alphabet rail must not overlap Add Application`,
+      `the ${language} 481px alphabet rail must not overlap Add Application: ${JSON.stringify({ add: phoneRail.add, rail: phoneRail.rail, overlapX, overlapY })}`,
     );
-    assert.equal(phoneRail.position, 'sticky', `the ${language} 481px alphabet rail must use in-flow sticky positioning`);
+    assert.equal(phoneRail.position, 'fixed', `the ${language} 481px alphabet rail must stay fixed to the mobile viewport`);
     assert.ok(phoneRail.rail.left >= phoneRail.table.right - 0.5, `the ${language} 481px alphabet rail must not cover the table`);
-    assert.ok(phoneRail.rail.right <= phoneRail.panel.right + 0.5, `the ${language} 481px alphabet rail must remain inside the Applications panel`);
+    assert.ok(phoneRail.rail.right <= phoneRail.viewportWidth + 0.5, `the ${language} 481px alphabet rail must remain inside the mobile viewport`);
+
+    await page.evaluate(() => window.scrollTo(0, 600));
+    await page.waitForFunction(() => window.scrollY >= 599);
+    const scrolledRail = await page.evaluate(() => {
+      const rail = document.querySelector('.applications-view .alphabet-index').getBoundingClientRect();
+      return { left: rail.left, top: rail.top };
+    });
+    assert.ok(Math.abs(scrolledRail.left - phoneRail.rail.left) <= 1, `the ${language} 481px alphabet rail must not move horizontally while the page scrolls`);
+    assert.ok(Math.abs(scrolledRail.top - phoneRail.rail.top) <= 1, `the ${language} 481px alphabet rail must not move vertically while the page scrolls`);
 
     await page.setViewportSize({ width: 481, height: 744 });
-    const shortRail = await page.evaluate(() => ({
-      railTop: document.querySelector('.applications-view .alphabet-index').getBoundingClientRect().top,
-      tableTop: document.querySelector('.applications-view .table-wrap').getBoundingClientRect().top,
-    }));
-    const tallRailOffset = phoneRail.rail.top - phoneRail.table.top;
-    const shortRailOffset = shortRail.railTop - shortRail.tableTop;
-    assert.ok(
-      Math.abs(shortRailOffset - tallRailOffset) <= 1,
-      `the ${language} phone alphabet rail must keep the same table-relative position when the mobile browser height changes`,
-    );
+    await page.evaluate(() => window.scrollTo(0, 0));
+    const shortRailBeforeScroll = await page.evaluate(() => {
+      const rail = document.querySelector('.applications-view .alphabet-index').getBoundingClientRect();
+      return { left: rail.left, top: rail.top, bottom: rail.bottom, viewportHeight: innerHeight };
+    });
+    assert.ok(shortRailBeforeScroll.top >= 0 && shortRailBeforeScroll.bottom <= shortRailBeforeScroll.viewportHeight, `the ${language} short-phone alphabet rail must fit inside the viewport`);
+    await page.evaluate(() => window.scrollTo(0, 600));
+    await page.waitForFunction(() => window.scrollY >= 599);
+    const shortRailAfterScroll = await page.evaluate(() => {
+      const rail = document.querySelector('.applications-view .alphabet-index').getBoundingClientRect();
+      return { left: rail.left, top: rail.top };
+    });
+    assert.ok(Math.abs(shortRailAfterScroll.left - shortRailBeforeScroll.left) <= 1, `the ${language} short-phone alphabet rail must keep its horizontal viewport position while scrolling`);
+    assert.ok(Math.abs(shortRailAfterScroll.top - shortRailBeforeScroll.top) <= 1, `the ${language} short-phone alphabet rail must keep its vertical viewport position while scrolling`);
   }
   assert.ok(requests.every((url) => url.startsWith(origin)), 'the responsive layout test must abort every non-local request');
 

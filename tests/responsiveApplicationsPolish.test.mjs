@@ -147,8 +147,8 @@ assert.match(
 );
 assert.match(
   phone,
-  /\.applications-view \.alphabet-index\s*\{[^}]*position:\s*sticky[^}]*grid-column:\s*2[^}]*grid-row:\s*2[^}]*top:\s*8px[^}]*bottom:\s*auto[^}]*right:\s*auto[^}]*max-height:\s*calc\(100svh - 16px\)/s,
-  'the phone alphabet rail must stay anchored to the Applications list instead of the changing viewport bottom',
+  /\.applications-view \.alphabet-index\s*\{[^}]*position:\s*fixed[^}]*top:\s*50%[^}]*bottom:\s*auto[^}]*right:\s*4px[^}]*transform:\s*translateY\(-50%\)[^}]*max-height:\s*calc\(100svh - 16px\)/s,
+  'the phone alphabet rail must stay fixed at the right-side viewport position while the page scrolls',
 );
 assert.match(
   narrowPhone,
@@ -161,6 +161,6 @@ assert.match(
   'the single-column fallback must not retain a two-column span',
 );
 assert.match(html, /rel="apple-touch-icon" href="\.\/assets\/job-tracker-icon-192\.png\?v=20260813-mobile-index-icon-stability"/);
-assert.match(html, /jobTrackerStyles\.css\?v=20260813-mobile-index-icon-stability/);
+assert.match(html, /jobTrackerStyles\.css\?v=20260813-mobile-index-fixed/);
 
 console.log('responsive Applications polish tests passed');
