@@ -2244,6 +2244,10 @@ body.auth-pending .alphabet-index {
     text-align: center;
   }
 
+  .applications-view tbody tr:not(.group-row) td:nth-child(8) > * {
+    justify-self: center;
+  }
+
   .applications-view thead th:nth-child(1) { grid-area: identity; }
   .applications-view thead th:nth-child(3) { grid-area: status; }
   .applications-view thead th:nth-child(4) { grid-area: date; }

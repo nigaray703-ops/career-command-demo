@@ -74,10 +74,20 @@ assert.match(
   /\.applications-view thead th:nth-child\(3\),[\s\S]*\.applications-view td:nth-child\(8\)\s*\{[^}]*text-align:\s*center/s,
   'Comfortable Date, Status, and Candidate Home headers and cells must be centered',
 );
+assert.match(
+  comfortable,
+  /\.applications-view tbody tr:not\(\.group-row\) td:nth-child\(8\)\s*>\s*\*\s*\{[^}]*justify-self:\s*center/s,
+  'The Candidate Home child must override the shared start alignment in the comfortable layout',
+);
 assert.doesNotMatch(
   phone,
   /\.applications-view thead th:nth-child\(3\),[\s\S]*\.applications-view td:nth-child\(8\)\s*\{[^}]*text-align:\s*center/s,
   'The comfortable alignment rule must not leak into phone compaction',
+);
+assert.doesNotMatch(
+  phone,
+  /\.applications-view tbody tr:not\(\.group-row\) td:nth-child\(8\)\s*>\s*\*\s*\{[^}]*justify-self:\s*center/s,
+  'The Candidate Home child centering rule must not leak into phone compaction',
 );
 assert.doesNotMatch(
   phone,
