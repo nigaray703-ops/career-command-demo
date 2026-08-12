@@ -102,6 +102,16 @@ assert.match(
 );
 assert.match(
   midTopbar,
+  /body\.is-lang-en \.applications-view #sortBy\s*\{[^}]*min-width:\s*120px[^}]*max-width:\s*120px/s,
+  'the English mid-width Sort select must reserve native-arrow space after Company A-Z',
+);
+assert.match(
+  midTopbar,
+  /body\.is-lang-en \.applications-view \.tool-select:has\(#sortBy\)\s*\{[^}]*min-width:\s*176px[^}]*max-width:\s*176px/s,
+  'the English 821–1200px Sort wrapper must stay wide enough at both 898px and 1200px',
+);
+assert.match(
+  midTopbar,
   /body\.is-lang-en \.applications-view \.compact-select\s*\{[^}]*min-width:\s*164px[^}]*max-width:\s*164px/s,
   'the English mid-width Direction control must reserve space for its complete selected value',
 );

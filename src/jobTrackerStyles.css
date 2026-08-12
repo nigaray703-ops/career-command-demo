@@ -2201,6 +2201,16 @@ body.auth-pending .alphabet-index {
     flex-wrap: nowrap;
   }
 
+  body.is-lang-en .applications-view .tool-select:has(#sortBy) {
+    min-width: 176px;
+    max-width: 176px;
+  }
+
+  body.is-lang-en .applications-view #sortBy {
+    min-width: 120px;
+    max-width: 120px;
+  }
+
   body.is-lang-en .applications-view .compact-select {
     min-width: 164px;
     max-width: 164px;
