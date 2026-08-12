@@ -23,6 +23,10 @@ const comfortable = extractMediaBlock(
   css,
   '/* Comfortable two-line Applications layout */\n@media (min-width: 521px) and (max-width: 1024px)',
 );
+const midTopbar = extractMediaBlock(
+  css,
+  '/* Mid-width topbar containment */\n@media (min-width: 821px) and (max-width: 1200px)',
+);
 
 assert.match(
   comfortable,
@@ -58,6 +62,26 @@ assert.doesNotMatch(
   comfortable,
   /\.applications-view tbody tr\.group-row[^}]*border-bottom:\s*1px solid rgba\(37,\s*99,\s*235,\s*0\.14\)/s,
   'group headers must not inherit the normal record separator',
+);
+assert.match(
+  midTopbar,
+  /\.topbar\s*\{[^}]*display:\s*grid[^}]*grid-template-columns:\s*minmax\(0,\s*1fr\)\s*auto[^}]*align-items:\s*start/s,
+  'the mid-width topbar must isolate copy from actions',
+);
+assert.match(
+  midTopbar,
+  /\.topbar > div:first-child\s*\{[^}]*display:\s*grid[^}]*min-width:\s*0[^}]*align-items:\s*start[^}]*gap:\s*4px/s,
+  'title and explanatory copy must stack in a shrinkable block',
+);
+assert.match(
+  midTopbar,
+  /\.topbar p\s*\{[^}]*white-space:\s*normal[^}]*overflow-wrap:\s*anywhere/s,
+  'long Chinese and English topbar copy must wrap inside its own column',
+);
+assert.match(
+  midTopbar,
+  /\.topbar-actions\s*\{[^}]*align-self:\s*start[^}]*flex-wrap:\s*nowrap/s,
+  'language and add controls must remain a separate stable action group',
 );
 
 console.log('responsive Applications polish tests passed');

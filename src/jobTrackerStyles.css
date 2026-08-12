@@ -2172,6 +2172,32 @@ body.auth-pending .alphabet-index {
   }
 }
 
+/* Mid-width topbar containment */
+@media (min-width: 821px) and (max-width: 1200px) {
+  .topbar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+  }
+
+  .topbar > div:first-child {
+    display: grid;
+    min-width: 0;
+    align-items: start;
+    gap: 4px;
+  }
+
+  .topbar p {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .topbar-actions {
+    align-self: start;
+    flex-wrap: nowrap;
+  }
+}
+
 /* Comfortable two-line Applications layout */
 @media (min-width: 521px) and (max-width: 1024px) {
   .workspace:has(.applications-view.active) {
