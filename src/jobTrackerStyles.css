@@ -1880,6 +1880,10 @@ body.auth-pending .alphabet-index {
     gap: 14px;
   }
 
+  .workspace:has(.applications-view.active) {
+    padding-right: 34px;
+  }
+
   .topbar {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;

@@ -161,6 +161,6 @@ assert.match(
   'the single-column fallback must not retain a two-column span',
 );
 assert.match(html, /rel="apple-touch-icon" href="\.\/assets\/job-tracker-icon-192\.png\?v=20260813-mobile-index-icon-stability"/);
-assert.match(html, /jobTrackerStyles\.css\?v=20260816-centered-alphabet-index/);
+assert.match(html, /jobTrackerStyles\.css\?v=20260816-centered-alphabet-index-channel/);
 
 console.log('responsive Applications polish tests passed');

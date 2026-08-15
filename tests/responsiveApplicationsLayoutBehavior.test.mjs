@@ -352,11 +352,13 @@ try {
     const halfScreenRailBeforeScroll = await page.evaluate(() => {
       const railElement = document.querySelector('.applications-view .alphabet-index');
       const rail = railElement.getBoundingClientRect();
+      const addButton = document.querySelector('#addApplicationButton').getBoundingClientRect();
       return {
         left: rail.left,
         right: rail.right,
         top: rail.top,
         bottom: rail.bottom,
+        addButtonRight: addButton.right,
         viewportWidth: innerWidth,
         viewportHeight: innerHeight,
         position: getComputedStyle(railElement).position,
@@ -365,6 +367,7 @@ try {
       };
     });
     assert.equal(halfScreenRailBeforeScroll.position, 'fixed', `the ${language} 751px alphabet rail must stay fixed to the viewport`);
+    assert.ok(halfScreenRailBeforeScroll.left >= halfScreenRailBeforeScroll.addButtonRight - 0.5, `the ${language} 751px alphabet rail must not cover the Add Application button`);
     assert.ok(halfScreenRailBeforeScroll.left >= 0 && halfScreenRailBeforeScroll.right <= halfScreenRailBeforeScroll.viewportWidth, `the ${language} 751px alphabet rail must stay inside the right edge of the viewport`);
     assert.ok(halfScreenRailBeforeScroll.top >= 0 && halfScreenRailBeforeScroll.bottom <= halfScreenRailBeforeScroll.viewportHeight, `the ${language} 751px alphabet rail must fit completely inside the viewport`);
     assert.ok(halfScreenRailBeforeScroll.scrollHeight <= halfScreenRailBeforeScroll.clientHeight, `the ${language} 751px alphabet rail must show every letter without its own scrollbar`);
