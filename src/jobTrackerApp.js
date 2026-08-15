@@ -490,6 +490,8 @@ function bindEvents() {
       render();
     }
   });
+
+  window.addEventListener('resize', syncResponsiveAlphabetIndex);
 }
 
 async function handleSession(session) {
@@ -716,6 +718,27 @@ function renderAlphabetIndex(records) {
     const label = letter === 'all' ? text('allInitials') : letter;
     return `<button type="button" data-initial="${letter}" class="${active ? 'active' : ''}" ${disabled ? 'disabled' : ''}>${escapeHtml(label)}</button>`;
   }).join('');
+  syncResponsiveAlphabetIndex();
+}
+
+function syncResponsiveAlphabetIndex() {
+  if (!els.alphabetIndex) return;
+  const shouldAlignWithPanel = state.view === 'applications'
+    && window.matchMedia('(min-width: 521px) and (max-width: 820px)').matches;
+  if (!shouldAlignWithPanel) {
+    els.alphabetIndex.style.removeProperty('--alphabet-index-top');
+    els.alphabetIndex.style.removeProperty('--alphabet-index-translate');
+    return;
+  }
+
+  const panel = els.alphabetIndex.closest('.panel');
+  if (!panel) return;
+  const panelTop = panel.getBoundingClientRect().top + window.scrollY;
+  const railHeight = els.alphabetIndex.getBoundingClientRect().height;
+  const maxTop = Math.max(8, window.innerHeight - railHeight - 8);
+  const alignedTop = Math.min(Math.max(8, panelTop), maxTop);
+  els.alphabetIndex.style.setProperty('--alphabet-index-top', `${alignedTop}px`);
+  els.alphabetIndex.style.setProperty('--alphabet-index-translate', '0%');
 }
 
 function companyInitial(value) {

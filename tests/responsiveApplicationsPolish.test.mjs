@@ -97,8 +97,8 @@ assert.match(
 );
 assert.match(
   sharedResponsive,
-  /\.applications-view \.alphabet-index\s*\{[^}]*top:\s*50%[^}]*bottom:\s*auto[^}]*max-height:\s*calc\(100svh - 16px\)[^}]*transform:\s*translateY\(-50%\)[^}]*right:\s*4px/s,
-  'the phone and half-screen alphabet rail must stay fully visible and fixed at the vertical center of the viewport',
+  /\.applications-view \.alphabet-index\s*\{[^}]*top:\s*var\(--alphabet-index-top,\s*50%\)[^}]*bottom:\s*auto[^}]*max-height:\s*calc\(100svh - 16px\)[^}]*transform:\s*translateY\(var\(--alphabet-index-translate,\s*-50%\)\)[^}]*right:\s*4px/s,
+  'the half-screen alphabet rail must accept the measured Applications panel top while retaining a centered fallback',
 );
 assert.match(
   midTopbar,
@@ -161,6 +161,6 @@ assert.match(
   'the single-column fallback must not retain a two-column span',
 );
 assert.match(html, /rel="apple-touch-icon" href="\.\/assets\/job-tracker-icon-192\.png\?v=20260813-mobile-index-icon-stability"/);
-assert.match(html, /jobTrackerStyles\.css\?v=20260816-centered-alphabet-index-channel/);
+assert.match(html, /jobTrackerStyles\.css\?v=20260816-alphabet-index-panel-align/);
 
 console.log('responsive Applications polish tests passed');

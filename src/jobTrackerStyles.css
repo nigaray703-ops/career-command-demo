@@ -1884,6 +1884,10 @@ body.auth-pending .alphabet-index {
     padding-right: 34px;
   }
 
+  .applications-view.active {
+    padding-right: 0;
+  }
+
   .topbar {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
@@ -2172,11 +2176,17 @@ body.auth-pending .alphabet-index {
   }
 
   .applications-view .alphabet-index {
-    top: 50%;
+    top: var(--alphabet-index-top, 50%);
     bottom: auto;
     max-height: calc(100svh - 16px);
-    transform: translateY(-50%);
+    transform: translateY(var(--alphabet-index-translate, -50%));
     right: 4px;
+    padding-block: 4px;
+    gap: 0;
+  }
+
+  .applications-view .alphabet-index button {
+    min-height: 16px;
   }
 }
 
@@ -2670,6 +2680,8 @@ body.auth-pending .alphabet-index {
     width: 20px;
     max-height: calc(100svh - 16px);
     padding-inline: 1px;
+    padding-block: 6px;
+    gap: 1px;
   }
 
   .applications-view .alphabet-index button {

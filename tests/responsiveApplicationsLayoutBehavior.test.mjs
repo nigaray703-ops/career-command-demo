@@ -349,29 +349,35 @@ try {
 
     await page.setViewportSize({ width: 751, height: 881 });
     await page.evaluate(() => window.scrollTo(0, 0));
+    await page.waitForFunction(() => getComputedStyle(document.querySelector('.applications-view .alphabet-index')).getPropertyValue('--alphabet-index-top').trim() !== '');
     const halfScreenRailBeforeScroll = await page.evaluate(() => {
       const railElement = document.querySelector('.applications-view .alphabet-index');
       const rail = railElement.getBoundingClientRect();
       const addButton = document.querySelector('#addApplicationButton').getBoundingClientRect();
+      const panel = document.querySelector('.applications-view .panel').getBoundingClientRect();
       return {
         left: rail.left,
         right: rail.right,
         top: rail.top,
         bottom: rail.bottom,
         addButtonRight: addButton.right,
+        panelRight: panel.right,
+        panelTop: panel.top,
         viewportWidth: innerWidth,
         viewportHeight: innerHeight,
         position: getComputedStyle(railElement).position,
         clientHeight: railElement.clientHeight,
         scrollHeight: railElement.scrollHeight,
+        measuredTop: getComputedStyle(railElement).getPropertyValue('--alphabet-index-top'),
       };
     });
     assert.equal(halfScreenRailBeforeScroll.position, 'fixed', `the ${language} 751px alphabet rail must stay fixed to the viewport`);
+    assert.ok(Math.abs(halfScreenRailBeforeScroll.addButtonRight - halfScreenRailBeforeScroll.panelRight) <= 1, `the ${language} 751px Add Application button and Applications panel must share one right edge`);
     assert.ok(halfScreenRailBeforeScroll.left >= halfScreenRailBeforeScroll.addButtonRight - 0.5, `the ${language} 751px alphabet rail must not cover the Add Application button`);
     assert.ok(halfScreenRailBeforeScroll.left >= 0 && halfScreenRailBeforeScroll.right <= halfScreenRailBeforeScroll.viewportWidth, `the ${language} 751px alphabet rail must stay inside the right edge of the viewport`);
     assert.ok(halfScreenRailBeforeScroll.top >= 0 && halfScreenRailBeforeScroll.bottom <= halfScreenRailBeforeScroll.viewportHeight, `the ${language} 751px alphabet rail must fit completely inside the viewport`);
     assert.ok(halfScreenRailBeforeScroll.scrollHeight <= halfScreenRailBeforeScroll.clientHeight, `the ${language} 751px alphabet rail must show every letter without its own scrollbar`);
-    assert.ok(Math.abs(((halfScreenRailBeforeScroll.top + halfScreenRailBeforeScroll.bottom) / 2) - (halfScreenRailBeforeScroll.viewportHeight / 2)) <= 1, `the ${language} 751px alphabet rail must be vertically centered`);
+    assert.ok(Math.abs(halfScreenRailBeforeScroll.top - halfScreenRailBeforeScroll.panelTop) <= 1, `the ${language} 751px alphabet rail top must align with the Applications panel top: ${JSON.stringify(halfScreenRailBeforeScroll)}`);
     await page.evaluate(() => window.scrollTo(0, 600));
     await page.waitForFunction(() => window.scrollY >= 599);
     const halfScreenRailAfterScroll = await page.evaluate(() => {
