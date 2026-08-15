@@ -346,6 +346,37 @@ try {
     });
     assert.ok(Math.abs(shortRailAfterScroll.left - shortRailBeforeScroll.left) <= 1, `the ${language} short-phone alphabet rail must keep its horizontal viewport position while scrolling`);
     assert.ok(Math.abs(shortRailAfterScroll.top - shortRailBeforeScroll.top) <= 1, `the ${language} short-phone alphabet rail must keep its vertical viewport position while scrolling`);
+
+    await page.setViewportSize({ width: 751, height: 881 });
+    await page.evaluate(() => window.scrollTo(0, 0));
+    const halfScreenRailBeforeScroll = await page.evaluate(() => {
+      const railElement = document.querySelector('.applications-view .alphabet-index');
+      const rail = railElement.getBoundingClientRect();
+      return {
+        left: rail.left,
+        right: rail.right,
+        top: rail.top,
+        bottom: rail.bottom,
+        viewportWidth: innerWidth,
+        viewportHeight: innerHeight,
+        position: getComputedStyle(railElement).position,
+        clientHeight: railElement.clientHeight,
+        scrollHeight: railElement.scrollHeight,
+      };
+    });
+    assert.equal(halfScreenRailBeforeScroll.position, 'fixed', `the ${language} 751px alphabet rail must stay fixed to the viewport`);
+    assert.ok(halfScreenRailBeforeScroll.left >= 0 && halfScreenRailBeforeScroll.right <= halfScreenRailBeforeScroll.viewportWidth, `the ${language} 751px alphabet rail must stay inside the right edge of the viewport`);
+    assert.ok(halfScreenRailBeforeScroll.top >= 0 && halfScreenRailBeforeScroll.bottom <= halfScreenRailBeforeScroll.viewportHeight, `the ${language} 751px alphabet rail must fit completely inside the viewport`);
+    assert.ok(halfScreenRailBeforeScroll.scrollHeight <= halfScreenRailBeforeScroll.clientHeight, `the ${language} 751px alphabet rail must show every letter without its own scrollbar`);
+    assert.ok(Math.abs(((halfScreenRailBeforeScroll.top + halfScreenRailBeforeScroll.bottom) / 2) - (halfScreenRailBeforeScroll.viewportHeight / 2)) <= 1, `the ${language} 751px alphabet rail must be vertically centered`);
+    await page.evaluate(() => window.scrollTo(0, 600));
+    await page.waitForFunction(() => window.scrollY >= 599);
+    const halfScreenRailAfterScroll = await page.evaluate(() => {
+      const rail = document.querySelector('.applications-view .alphabet-index').getBoundingClientRect();
+      return { left: rail.left, top: rail.top };
+    });
+    assert.ok(Math.abs(halfScreenRailAfterScroll.left - halfScreenRailBeforeScroll.left) <= 1, `the ${language} 751px alphabet rail must not move horizontally while the page scrolls`);
+    assert.ok(Math.abs(halfScreenRailAfterScroll.top - halfScreenRailBeforeScroll.top) <= 1, `the ${language} 751px alphabet rail must not move vertically while the page scrolls`);
   }
   assert.ok(requests.every((url) => url.startsWith(origin)), 'the responsive layout test must abort every non-local request');
 

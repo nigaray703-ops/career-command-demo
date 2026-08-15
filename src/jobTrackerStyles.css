@@ -2168,10 +2168,10 @@ body.auth-pending .alphabet-index {
   }
 
   .applications-view .alphabet-index {
-    top: auto;
-    bottom: 10px;
-    max-height: min(44vh, 460px);
-    transform: none;
+    top: 50%;
+    bottom: auto;
+    max-height: calc(100svh - 16px);
+    transform: translateY(-50%);
     right: 4px;
   }
 }
