@@ -659,7 +659,7 @@ function renderDonut(stats) {
 function renderStatusBars(stats) {
   els.statusBars.innerHTML = DISPLAY_STATUSES.map((status) => {
     const count = getDisplayStatusCount(stats, status);
-    const width = stats.total ? Math.max(4, (count / stats.total) * 100) : 0;
+    const width = stats.total ? (count / stats.total) * 100 : 0;
     return `
       <div class="status-bar-row">
         <div class="bar-label"><span>${escapeHtml(statusLabel(status))}</span><strong>${count}</strong></div>
