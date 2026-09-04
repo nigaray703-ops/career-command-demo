@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import {
   calculateDashboardStats,
   createApplication,
+  filterApplications,
   restoreApplications,
   serializeApplications,
   updateApplication,
@@ -26,25 +27,30 @@ assert.equal(
 const directOfferOnly = calculateDashboardStats([directOffer]);
 assert.equal(directOfferOnly.interviewRate, 0, 'a direct Offer must not increase interview rate');
 assert.equal(directOfferOnly.statusCounts.Offer, 1, 'the direct Offer remains one current Offer');
-assert.equal(directOfferOnly.interviewCount, 0, 'the current Interview count stays exclusive');
+assert.equal(directOfferOnly.interviewCount, 0, 'a direct Offer must not increase the historical Interview count');
 
 const records = [interview, finalRound, directOffer, interviewedOffer, rejectedAfterInterview];
 const stats = calculateDashboardStats(records);
 assert.equal(stats.statusCounts['面试'], 1, 'only the current Interview record counts as Interview');
 assert.equal(stats.statusCounts.Offer, 2, 'both Offers count once as current Offers');
-assert.equal(stats.interviewCount, 1, 'Interview count must equal the exact current status count');
+assert.equal(stats.interviewCount, 4, 'Interview count must retain every historical interview milestone');
 assert.equal(stats.everInterviewedCount, 4, 'historical count includes Interview, Final, interviewed Offer, and rejected-after-interview');
 assert.equal(stats.interviewRate, 80, 'historical interview rate uses the milestone over total applications');
+assert.deepEqual(
+  filterApplications(records, { status: 'everInterviewed' }).map((record) => record.id),
+  ['interview', 'final', 'interviewed-offer', 'rejected'],
+  'the historical Interview filter must include later Final, Offer, and Rejected outcomes',
+);
 
 const movedToRejected = updateApplication([interview], 'interview', { status: '已拒' })[0];
 assert.equal(movedToRejected.everInterviewed, true, 'Interview to Rejected must preserve the milestone automatically');
 assert.equal(calculateDashboardStats([movedToRejected]).interviewRate, 100);
-assert.equal(calculateDashboardStats([movedToRejected]).interviewCount, 0);
+assert.equal(calculateDashboardStats([movedToRejected]).interviewCount, 1);
 
 const movedToOffer = updateApplication([interview], 'interview', { status: 'Offer' })[0];
 assert.equal(movedToOffer.everInterviewed, true, 'Interview to Offer must preserve the milestone automatically');
 assert.equal(calculateDashboardStats([movedToOffer]).statusCounts.Offer, 1);
-assert.equal(calculateDashboardStats([movedToOffer]).interviewCount, 0);
+assert.equal(calculateDashboardStats([movedToOffer]).interviewCount, 1);
 assert.equal(calculateDashboardStats([movedToOffer]).interviewRate, 100);
 
 const manuallyCorrected = updateApplication([movedToRejected], 'interview', { everInterviewed: false })[0];

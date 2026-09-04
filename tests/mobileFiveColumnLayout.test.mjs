@@ -39,7 +39,7 @@ assert.match(
 );
 assert.match(css, /\.metric-grid\s*\{[^}]*grid-template-columns:\s*repeat\(12,\s*minmax\(0,\s*1fr\)\)/s);
 assert.match(css, /\.metric-card:nth-child\(-n \+ 3\)\s*\{[^}]*grid-column:\s*span 4/s);
-assert.match(css, /\.metric-card:nth-child\(n \+ 4\)\s*\{[^}]*grid-column:\s*span 3/s);
+assert.match(css, /\.metric-card:nth-child\(n \+ 4\)\s*\{[^}]*grid-column:\s*span 6/s);
 assert.match(
   css,
   /\.applications-view tbody tr:not\(\.group-row\)\s*\{[^}]*grid-template-columns:\s*minmax\(0,\s*1\.35fr\)\s*minmax\(0,\s*0\.72fr\)\s*minmax\(0,\s*0\.5fr\)\s*minmax\(0,\s*0\.58fr\)\s*minmax\(0,\s*0\.9fr\)/s,

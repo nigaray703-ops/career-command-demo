@@ -62,7 +62,9 @@ export function filterApplications(records, filters = {}) {
       record.notes,
     ].join(' '));
     const matchesQuery = !query || searchable.includes(query);
-    const matchesStatus = !filters.status || filters.status === 'all' || record.status === filters.status;
+    const matchesStatus = !filters.status
+      || filters.status === 'all'
+      || (filters.status === 'everInterviewed' ? record.everInterviewed === true : record.status === filters.status);
     const matchesInitial = initial === 'all' || companyInitial(record.companyName) === initial;
     return matchesQuery && matchesStatus && matchesInitial;
   });
@@ -110,7 +112,6 @@ export function calculateDashboardStats(records) {
   });
 
   const total = records.length;
-  const interviewCount = statusCounts['面试'] || 0;
   const everInterviewedCount = records.reduce(
     (sum, record) => sum + (record.everInterviewed === true ? 1 : 0),
     0,
@@ -122,7 +123,7 @@ export function calculateDashboardStats(records) {
     statusCounts,
     applied: statusCounts['申请中'] || 0,
     rejected,
-    interviewCount,
+    interviewCount: everInterviewedCount,
     everInterviewedCount,
     offer: statusCounts.Offer || 0,
     noResponse: 0,

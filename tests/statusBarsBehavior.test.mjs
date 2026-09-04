@@ -95,7 +95,7 @@ try {
           appliedDate: '2026-08-01',
           appliedDateNote: '',
           status,
-          everInterviewed: status === '面试' || status === '终面',
+          everInterviewed: status === '面试' || status === '终面' || (status === '已拒' && index === 0),
           priority: '中',
           rejectionReason: '',
           notes: '',
@@ -114,11 +114,26 @@ try {
   });
 
   await page.goto(`${origin}/${htmlName}#dashboard`, { waitUntil: 'networkidle' });
+  const metrics = await page.locator('#metricGrid .metric-card').evaluateAll((cards) => Object.fromEntries(cards.map((card) => [
+    card.querySelector('span').textContent.trim(),
+    card.querySelector('strong').textContent.trim(),
+  ])));
+  assert.deepEqual(
+    Object.keys(metrics),
+    ['总申请数', '申请中', '已拒', '面试', 'Offer'],
+    'the top dashboard must keep only the five count summaries',
+  );
   const bars = await page.locator('#statusBars .status-bar-row').evaluateAll((rows) => rows.map((row) => ({
     count: Number(row.querySelector('.bar-label strong').textContent),
     width: Number.parseFloat(row.querySelector('.bar-track span').style.width),
   })));
 
+  assert.equal(metrics['面试'], '6', 'the Interview summary must retain a record rejected after interview');
+  assert.deepEqual(
+    await page.locator('#rateCards .rate-card strong').allTextContents(),
+    ['61%', '4.3%'],
+    'the lower conversion panel must remain the only place for rate summaries',
+  );
   assert.equal(bars.length, expectedBars.length, 'the dashboard must render one bar for each current status');
   bars.forEach((bar, index) => {
     assert.equal(bar.count, expectedBars[index].count, `status row ${index + 1} must show the correct count`);
@@ -128,7 +143,22 @@ try {
     );
   });
   assert.ok(bars[2].width > bars[4].width, 'Interview 5 must render longer than Offer 1');
+  assert.equal(bars[1].count, 86, 'a rejected-after-interview record must remain only in the current Rejected distribution');
+  assert.equal(bars[2].count, 5, 'the current Interview distribution must not double-count rejected records');
   assert.equal(bars[3].width, 0, 'Final 0 must render with no colored progress length');
+
+  await page.locator('[data-summary-key="interview"]').click();
+  const summaryDialog = page.locator('#metricSummaryDialog');
+  await assert.doesNotReject(() => summaryDialog.waitFor({ state: 'visible' }));
+  assert.equal(await summaryDialog.locator('.metric-summary-item').count(), 6, 'Interview summary must list all six historical interviews');
+  assert.equal(await summaryDialog.locator('[data-record-id="已拒-0"]').count(), 1, 'Interview summary must retain a later rejected role');
+  const dialogBox = await summaryDialog.boundingBox();
+  assert.ok(dialogBox && dialogBox.x >= 0 && dialogBox.x + dialogBox.width <= 551, 'the summary dialog must fit a phone viewport');
+
+  await page.locator('#metricSummaryViewAll').click();
+  assert.equal(new URL(page.url()).hash, '#applications', 'View Full List must open the applications view');
+  assert.equal(await page.locator('#statusFilter').inputValue(), 'everInterviewed', 'Interview View Full List must use the historical filter');
+  assert.equal(await page.locator('#applicationRows tr:not(.group-row)').count(), 6, 'the historical interview filter must show all six matching roles');
   assert.ok(requests.every((url) => url.startsWith(origin)), 'the behavior test must not call cloud or auth services');
 
   console.log('dashboard status bar behavior tests passed');

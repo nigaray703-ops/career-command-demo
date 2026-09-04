@@ -196,6 +196,24 @@
       </main>
     </div>
 
+    <dialog id="metricSummaryDialog" class="metric-summary-dialog" aria-labelledby="metricSummaryTitle">
+      <div class="metric-summary-shell">
+        <div class="dialog-head">
+          <div>
+            <p id="metricSummaryKicker">岗位摘要</p>
+            <h2 id="metricSummaryTitle">申请岗位</h2>
+          </div>
+          <button class="icon-button" id="metricSummaryClose" type="button" aria-label="关闭" data-i18n-aria-label="close">×</button>
+        </div>
+        <p class="metric-summary-meta" id="metricSummaryMeta"></p>
+        <div class="metric-summary-list" id="metricSummaryList"></div>
+        <div class="dialog-actions metric-summary-actions">
+          <button class="ghost-button" id="metricSummaryFooterClose" type="button" data-i18n="close">关闭</button>
+          <button class="primary-button" id="metricSummaryViewAll" type="button" data-i18n="viewFullList">查看完整列表</button>
+        </div>
+      </div>
+    </dialog>
+
     <dialog id="applicationDialog">
       <form class="application-form" id="applicationForm" method="dialog">
         <div class="dialog-head">
@@ -258,6 +276,6 @@
       </form>
     </dialog>
 
-    <script type="module" src="./src/jobTrackerApp.js?v=20260827-accurate-status-bars"></script>
+    <script type="module" src="./src/jobTrackerApp.js?v=20260904-clickable-metric-summaries"></script>
   </body>
 </html>

@@ -667,6 +667,37 @@ h1 {
   gap: 10px;
 }
 
+.metric-card-button {
+  position: relative;
+  width: 100%;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.metric-card-button::after {
+  content: "›";
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  color: var(--accent);
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.metric-card-button:hover {
+  border-color: rgba(37, 99, 235, 0.32);
+  box-shadow: 0 12px 28px rgba(37, 99, 235, 0.12);
+  transform: translateY(-1px);
+}
+
+.metric-card-button:focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.22);
+  outline-offset: 2px;
+}
+
 .metric-card span,
 .rate-card span {
   color: var(--muted);
@@ -1375,9 +1406,89 @@ dialog::backdrop {
   margin-top: 8px;
 }
 
+.metric-summary-dialog {
+  width: min(620px, calc(100vw - 28px));
+  max-height: min(720px, calc(100vh - 28px));
+  overflow: hidden;
+}
+
+.metric-summary-shell {
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  max-height: min(720px, calc(100vh - 28px));
+  padding: 20px;
+}
+
+.metric-summary-meta {
+  margin: -8px 0 12px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.metric-summary-list {
+  min-height: 0;
+  overflow-y: auto;
+  border-block: 1px solid var(--line-soft);
+}
+
+.metric-summary-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 2px;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.metric-summary-item:last-child {
+  border-bottom: 0;
+}
+
+.metric-summary-copy {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.metric-summary-copy strong,
+.metric-summary-copy span {
+  overflow-wrap: anywhere;
+}
+
+.metric-summary-copy span,
+.metric-summary-item-meta time {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.metric-summary-item-meta {
+  display: grid;
+  justify-items: end;
+  gap: 7px;
+  min-width: 110px;
+}
+
+.metric-summary-empty {
+  padding: 36px 12px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.metric-summary-actions {
+  margin-top: 14px;
+}
+
 @media (max-width: 1180px) {
   .metric-grid {
-    grid-template-columns: repeat(3, minmax(150px, 1fr));
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .metric-card {
+    grid-column: span 2;
+  }
+
+  .metric-card:nth-last-child(-n + 2) {
+    grid-column: span 3;
   }
 
   .dashboard-grid {
@@ -1915,7 +2026,7 @@ body.auth-pending .alphabet-index {
   }
 
   .metric-card:nth-child(n + 4) {
-    grid-column: span 3;
+    grid-column: span 6;
   }
 
   .dashboard-grid {
@@ -2494,6 +2605,35 @@ body.auth-pending .alphabet-index {
 
   body.is-lang-en .metric-card strong {
     font-size: 18px;
+  }
+
+  .metric-card-button::after {
+    top: 5px;
+    right: 7px;
+    font-size: 15px;
+  }
+
+  .metric-summary-shell {
+    padding: 14px;
+  }
+
+  .metric-summary-item {
+    gap: 10px;
+    padding-block: 12px;
+  }
+
+  .metric-summary-item-meta {
+    min-width: 92px;
+  }
+
+  .metric-summary-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .metric-summary-actions button {
+    min-width: 0;
+    min-height: 44px;
   }
 
   .chart-panel,

@@ -14,7 +14,7 @@ import {
   serializeApplications,
   sortApplications,
   updateApplication,
-} from './jobTrackerLogic.js?v=20260812-ever-interviewed';
+} from './jobTrackerLogic.js?v=20260904-clickable-metric-summaries';
 import {
   getCloudSession,
   hasSupabaseConfig,
@@ -38,6 +38,14 @@ const statusColors = {
   已拒: '#ef8a8a',
   已关闭: '#94a3b8',
 };
+const METRIC_SUMMARY_FILTERS = {
+  total: 'all',
+  active: '申请中',
+  rejected: '已拒',
+  interview: 'everInterviewed',
+  offer: 'Offer',
+};
+const METRIC_SUMMARY_LIMIT = 12;
 
 const i18n = {
   zh: {
@@ -77,6 +85,12 @@ const i18n = {
     distribution: '状态分布',
     distributionHint: '按当前状态统计申请分布。',
     rates: '转化率',
+    roleSummary: '岗位摘要',
+    viewSummary: '查看岗位摘要',
+    viewFullList: '查看完整列表',
+    summaryShowing: '显示最近 {shown} 条，共 {total} 条',
+    summaryEmpty: '暂无相关岗位',
+    everInterviewedFilter: '曾进入面试',
     total: '总申请数',
     active: '申请中',
     rejected: '已拒',
@@ -194,6 +208,12 @@ const i18n = {
     distribution: 'Status Distribution',
     distributionHint: 'Current application status breakdown.',
     rates: 'Conversion Rates',
+    roleSummary: 'Role Summary',
+    viewSummary: 'View role summary',
+    viewFullList: 'View Full List',
+    summaryShowing: 'Showing latest {shown} of {total}',
+    summaryEmpty: 'No matching roles',
+    everInterviewedFilter: 'Reached interview stage',
     total: 'Total',
     active: 'Active',
     rejected: 'Rejected',
@@ -288,6 +308,7 @@ const state = {
   filters: { query: '', status: 'all', initial: 'all' },
   sort: getInitialSort(),
   pendingDeleteId: '',
+  summaryKey: '',
   formSnapshot: '',
   saveTimer: null,
 };
@@ -318,6 +339,14 @@ const els = {
   statusDonut: document.querySelector('#statusDonut'),
   statusBars: document.querySelector('#statusBars'),
   rateCards: document.querySelector('#rateCards'),
+  metricSummaryDialog: document.querySelector('#metricSummaryDialog'),
+  metricSummaryKicker: document.querySelector('#metricSummaryKicker'),
+  metricSummaryTitle: document.querySelector('#metricSummaryTitle'),
+  metricSummaryMeta: document.querySelector('#metricSummaryMeta'),
+  metricSummaryList: document.querySelector('#metricSummaryList'),
+  metricSummaryClose: document.querySelector('#metricSummaryClose'),
+  metricSummaryFooterClose: document.querySelector('#metricSummaryFooterClose'),
+  metricSummaryViewAll: document.querySelector('#metricSummaryViewAll'),
   applicationRows: document.querySelector('#applicationRows'),
   alphabetIndex: document.querySelector('#alphabetIndex'),
   emptyState: document.querySelector('#emptyState'),
@@ -414,6 +443,17 @@ function bindEvents() {
   });
 
   els.addButton.addEventListener('click', () => openForm());
+  els.metricGrid.addEventListener('click', (event) => {
+    const card = event.target.closest('[data-summary-key]');
+    if (card) openMetricSummary(card.dataset.summaryKey);
+  });
+  [els.metricSummaryClose, els.metricSummaryFooterClose].forEach((button) => {
+    button?.addEventListener('click', () => els.metricSummaryDialog.close());
+  });
+  els.metricSummaryViewAll?.addEventListener('click', showMetricSummaryInApplications);
+  els.metricSummaryDialog?.addEventListener('close', () => {
+    state.summaryKey = '';
+  });
   els.search.addEventListener('input', (event) => {
     state.filters.query = event.target.value;
     renderApplications();
@@ -523,7 +563,9 @@ async function handleSession(session) {
 }
 
 function initializeOptions() {
-  els.statusFilter.innerHTML = option('all', text('allStatuses')) + APPLICATION_STATUSES.map((status) => option(status, statusLabel(status))).join('');
+  els.statusFilter.innerHTML = option('all', text('allStatuses'))
+    + option('everInterviewed', text('everInterviewedFilter'))
+    + APPLICATION_STATUSES.map((status) => option(status, statusLabel(status))).join('');
   els.statusOptions.innerHTML = APPLICATION_STATUSES.map((status) => option(status, statusLabel(status))).join('');
   els.workModeOptions.innerHTML = WORK_MODES.map((mode) => option(mode, modeLabel(mode))).join('');
   els.employmentTypeOptions.innerHTML = EMPLOYMENT_TYPES.map((type) => option(type, employmentTypeLabel(type))).join('');
@@ -612,18 +654,16 @@ function renderDashboard() {
     ['total', stats.total, text('totalHint')],
     ['active', stats.applied, text('activeHint')],
     ['rejected', stats.rejected, text('rejectedHint')],
-    ['interview', stats.statusCounts['面试'] || 0, text('interviewHint')],
+    ['interview', stats.interviewCount, text('interviewHint')],
     ['offer', stats.offer, text('offerHint')],
-    ['rejectionRate', `${stats.rejectionRate}%`, text('rejectionRateHint')],
-    ['interviewRate', `${stats.interviewRate}%`, text('interviewRateHint')],
   ];
 
   els.metricGrid.innerHTML = cards.map(([key, value, hint]) => `
-    <article class="metric-card">
+    <button type="button" class="metric-card metric-card-button" data-summary-key="${key}" aria-label="${escapeHtml(`${text('viewSummary')}：${text(key)}`)}">
       <span>${escapeHtml(text(key))}</span>
       <strong>${escapeHtml(value)}</strong>
       <small>${escapeHtml(hint)}</small>
-    </article>
+    </button>
   `).join('');
 
   renderDonut(stats);
@@ -632,6 +672,54 @@ function renderDashboard() {
     rateTemplate(text('rejectionRate'), stats.rejectionRate, text('rejectionRateHint')),
     rateTemplate(text('interviewRate'), stats.interviewRate, text('interviewRateHint')),
   ].join('');
+  if (els.metricSummaryDialog.open && state.summaryKey) renderMetricSummary(state.summaryKey);
+}
+
+function openMetricSummary(key) {
+  if (!METRIC_SUMMARY_FILTERS[key]) return;
+  state.summaryKey = key;
+  renderMetricSummary(key);
+  els.metricSummaryDialog.showModal();
+}
+
+function renderMetricSummary(key) {
+  const status = METRIC_SUMMARY_FILTERS[key];
+  const allRecords = sortApplications(
+    filterApplications(state.applications, { status }),
+    { sortBy: 'appliedDate', sortDirection: 'desc' },
+  );
+  const visibleRecords = allRecords.slice(0, METRIC_SUMMARY_LIMIT);
+  els.metricSummaryKicker.textContent = text('roleSummary');
+  els.metricSummaryTitle.textContent = `${text(key)} · ${allRecords.length}`;
+  els.metricSummaryMeta.textContent = text('summaryShowing')
+    .replace('{shown}', visibleRecords.length)
+    .replace('{total}', allRecords.length);
+  els.metricSummaryList.innerHTML = visibleRecords.length
+    ? visibleRecords.map((record) => `
+      <article class="metric-summary-item" data-record-id="${escapeHtml(record.id)}">
+        <div class="metric-summary-copy">
+          <strong>${escapeHtml(record.companyName || '-')}</strong>
+          <span>${escapeHtml(record.roleTitle || '-')}</span>
+        </div>
+        <div class="metric-summary-item-meta">
+          ${statusBadge(record.status)}
+          <time>${formatAppliedDate(record) || '-'}</time>
+        </div>
+      </article>
+    `).join('')
+    : `<p class="metric-summary-empty">${escapeHtml(text('summaryEmpty'))}</p>`;
+  els.metricSummaryViewAll.disabled = allRecords.length === 0;
+}
+
+function showMetricSummaryInApplications() {
+  const status = METRIC_SUMMARY_FILTERS[state.summaryKey];
+  if (!status) return;
+  state.filters = { query: '', status, initial: 'all' };
+  els.search.value = '';
+  els.statusFilter.value = status;
+  setView('applications');
+  els.metricSummaryDialog.close();
+  render();
 }
 
 function renderDonut(stats) {
